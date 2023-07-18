@@ -3,27 +3,21 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
-public class Zombie
+public class Zombie : IBody
 {
-    FlowLayoutPanel panel;
-    Random numberRandom = new Random();
+    Rectangle zombie;
+    Random numberRandom = Random.Shared;
     int x;
     int y;
 
-    public Zombie(Form form)
+    public Zombie(int x, int y)
     {
-        panel = new FlowLayoutPanel()
-        {
-            BackColor = Color.Green,
-            Location = new Point(numberRandom.Next(0, 1200), numberRandom.Next(0, 1200)),
-            Width = numberRandom.Next(20, 25),
-            Height = numberRandom.Next(20, 30)
-        };
+        zombie = new Rectangle(x, y, 20, 20);
+    }
 
-        form.Controls.Add(panel);
-
-        x = panel.Location.X;
-        y = panel.Location.Y;
+    public void Draw(Graphics g, SolidBrush color)
+    {
+        g.FillRectangle(color, this.zombie);
     }
 
     public void go(int PositionPlayerX, int PositionPlayerY, int zombieSpeed)
@@ -52,6 +46,11 @@ public class Zombie
             y -= zombieSpeed;
         }
         
-        panel.Location = new Point(x, y);
+        zombie.Location = new Point(x, y);
+    }
+
+    public void Update()
+    {
+        throw new NotImplementedException();
     }
 }
