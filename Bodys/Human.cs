@@ -12,7 +12,7 @@ public class Human : IBody
     public int life = 100;
     public int x;
     public int y;
-    public int weight = 20;
+    public int width = 20;
     public int height = 20;
 
     int maxSpeed = 1;
@@ -25,7 +25,12 @@ public class Human : IBody
     public Human(Form form)
     {
         
-        human = new Rectangle(numberRandom.Next(0,1200), numberRandom.Next(0,1200), weight, height);
+        human = new Rectangle(
+        numberRandom.Next(0,1200), 
+        numberRandom.Next(0,1200),
+        width, 
+        height);
+
         this.x = human.Location.X;
         this.y = human.Location.Y;
 

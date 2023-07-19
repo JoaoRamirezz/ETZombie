@@ -8,19 +8,21 @@ public class ZombieMain : IBody
     Rectangle zombie;
     int life = 20;
     public int movespeed = 2;
-    public int attackDamage = 5;
+    public int attackDamage = 1;
     public int x;
     public int y;
     bool goLeft = false;
     bool goRight = false;
     bool goTop = false;
     bool goDown = false;
+    public int Width = 20;
+    public int Height = 20;
 
 
 
     public ZombieMain()
     {
-        zombie = new Rectangle(0, 0, 20, 20);
+        zombie = new Rectangle(0, 0, Width, Height);
     }
 
     public void go(KeyEventArgs e)
@@ -75,7 +77,7 @@ public class ZombieMain : IBody
 
     public bool intersect(Human human)
     {
-        Rectangle Rect = new Rectangle(human.x, human.y, human.weight, human.height);
+        Rectangle Rect = new Rectangle(human.x, human.y, human.width, human.height);
         if (this.zombie.IntersectsWith(Rect))
             return true;
         return false;
