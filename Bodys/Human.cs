@@ -27,7 +27,7 @@ public class Human : IBody
     {
         human = new Rectangle(numberRandom.Next(0,500), numberRandom.Next(0,500), 20, 20);
         this.x = human.Location.X;
-        this.y = human.Location.Y;
+        this.y = human.Location.Y;  
     }
 
     public void Draw(Graphics g, SolidBrush color)

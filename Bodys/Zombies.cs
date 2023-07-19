@@ -13,11 +13,18 @@ public class Zombie : IBody
     public Zombie(int x, int y)
     {
         zombie = new Rectangle(x, y, 20, 20);
+        this.x = x;
+        this.y = y; 
     }
 
     public void Draw(Graphics g, SolidBrush color)
     {
         g.FillRectangle(color, this.zombie);
+    }
+
+    public void Spaw(int x, int y)
+    {
+        zombie.Location = new Point(x, y);
     }
 
     public void go(int PositionPlayerX, int PositionPlayerY, int zombieSpeed)

@@ -25,9 +25,7 @@ public class Game
         form.FormBorderStyle = FormBorderStyle.None;
         form.Controls.Add(pb);
 
-
-
-        var zombieMain = new ZombieMain();
+        var zombieMain = new ZombieMain(500, 500);
         var human = new Human();
         var zombie = new Zombie(human.x, human.y);
 
@@ -42,19 +40,18 @@ public class Game
         {
             while (running)
             {
-                
                 zombieMain.Draw(g,  new SolidBrush(Color.Red));
                 zombieMain.Update();    
                 human.Draw( g,  new SolidBrush(Color.Black));
                 human.escape(zombieMain.x, zombieMain.y);
                 
-
                 foreach (var z in zombies)
                 {
-                    z.Draw(g,  new SolidBrush(Color.Green));
+                    z.Draw(g,  new SolidBrush(Color.Green));  
+                    z.Spaw(human.x, human.y);            
                     z.go(zombieMain.x,
                          zombieMain.y,
-                         zombieMain.movespeed - 1);
+                         zombieMain.movespeed - 1);    
                 }
                 
                 pb.Refresh();
