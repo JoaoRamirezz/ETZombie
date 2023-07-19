@@ -1,16 +1,14 @@
 using System;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
 
-public class ZombieMain
+public class ZombieMain : IBody
 {
-    FlowLayoutPanel panel;
 
+    Rectangle zombie;
     int life = 20;
-    public int movespeed = 3;
-
-
-
+    public int movespeed = 2;
+    public int attackDamage = 5;
     public int x;
     public int y;
     bool goLeft = false;
@@ -20,27 +18,13 @@ public class ZombieMain
 
 
 
-    public ZombieMain(Form form)
+    public ZombieMain()
     {
-        panel = new FlowLayoutPanel()
-        {
-            ForeColor = Color.DarkBlue,
-            BackColor = Color.Coral,
-            Height = 20,
-            Width = 20
-        };
-
-        form.Controls.Add(panel);
-
-        x = panel.Location.X;
-        y = panel.Location.Y;
+        zombie = new Rectangle(0, 0, 20, 20);
     }
 
     public void go(KeyEventArgs e)
     {
-        if (e.KeyCode == Keys.Escape)
-            Application.Exit();
-
         if (e.KeyCode == Keys.D)
             goRight = true;
 
@@ -69,7 +53,7 @@ public class ZombieMain
             goTop = false;
     }
 
-    public void movement()
+    public void Update()
     {
         if (goLeft)
             x -= movespeed;
@@ -80,8 +64,21 @@ public class ZombieMain
         if (goDown)
             y += movespeed;
 
-        panel.Location = new Point(x, y);
+        zombie.Location = new Point(x, y);
 
+    }
+
+    public void Draw(Graphics g, SolidBrush color)
+    {
+       g.FillRectangle(color, this.zombie);
+    }
+
+    public bool intersect(Human human)
+    {
+        Rectangle Rect = new Rectangle(human.x, human.y, human.weight, human.height);
+        if (this.zombie.IntersectsWith(Rect))
+            return true;
+        return false;
     }
 }
 
