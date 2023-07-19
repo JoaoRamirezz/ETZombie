@@ -35,7 +35,7 @@ public class Game
         // Create rectangle for displaying image.
 
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 20; i++)
         {
             human = new Human(form);
             humans.Add(human);
@@ -77,13 +77,13 @@ public class Game
                 foreach (var z in zombies)
                 {
                     z.Draw(g, new SolidBrush(Color.Green));
+                    z.Spaw(human.x, human.y);            
                     z.go(zombieMain.x,
                          zombieMain.y,
                          zombieMain.movespeed - 1);
+
                 }
-
-
-
+                
                 pb.Refresh();
                 g.Clear(Color.Transparent);
                 Application.DoEvents();
@@ -112,7 +112,6 @@ public class Game
             bmp = new Bitmap(pb.Width, pb.Height);
             g = Graphics.FromImage(bmp);
             pb.Image = bmp;
-
 
             timer.Start();
         };
