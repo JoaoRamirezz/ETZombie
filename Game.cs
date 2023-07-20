@@ -76,25 +76,21 @@ public class Game
                         }
                     }
                 }
-
+                
 
 
 
                 foreach (var z in zombies)
-                {
-                    z.Draw(g, new SolidBrush(Color.Green));
-                    z.Spaw(human.x, human.y);            
-                    z.go(zombieMain.x,
-                         zombieMain.y,
-                         zombieMain.movespeed - 1);
-                }
+                    z.Draw(g, new SolidBrush(Color.Green));     
+                        
+
+                zombie.DrunkZombie(zombies, zombieMain.x, zombieMain.y);
                 
                 pb.Refresh();
                 g.Clear(Color.Transparent);
                 Application.DoEvents();
             }
         };
-
 
         form.KeyDown += (s, e) =>
         {
@@ -118,10 +114,6 @@ public class Game
 
             timer.Start();
         };
-
-
-
-
 
         form.KeyPreview = true;
 
