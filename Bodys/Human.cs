@@ -9,25 +9,26 @@ public class Human : IBody
     Rectangle human;
     Random numberRandom = Random.Shared;
 
-    public int life = 20;
+    public int life = 100;
     public int x;
     public int y;
-    public int right;
-    public int left;
-    public int bottom;
-    public int top;
-    int maxSpeed = 5;
+    public int weight = 20;
+    public int height = 20;
+
+    int maxSpeed = 1;
     double direcaoX;
     double direcaoY;
     int pointOfView = 300;
     double range;
     double d;
 
-    public Human()
+    public Human(Form form)
     {
-        human = new Rectangle(numberRandom.Next(0,500), numberRandom.Next(0,500), 20, 20);
+        
+        human = new Rectangle(numberRandom.Next(0,1200), numberRandom.Next(0,1200), weight, height);
         this.x = human.Location.X;
-        this.y = human.Location.Y;  
+        this.y = human.Location.Y;
+
     }
 
     public void Draw(Graphics g, SolidBrush color)
@@ -45,19 +46,26 @@ public class Human : IBody
         x = human.Location.X;
         y = human.Location.Y;
 
-        d = Math.Pow((x - zombieX), 2) + Math.Pow((y - zombieY),2);
+        d = Math.Pow((x - zombieX), 2) + Math.Pow((y - zombieY), 2);
 
         range = Math.Sqrt(d);
 
         if (range <= pointOfView)
         {
-            direcaoX = (x - zombieX)*-1;
-            direcaoY = (y - zombieY)*-1;
+            direcaoX = -(x - zombieX);
+            direcaoY = -(y - zombieY);
 
             double pita = Math.Sqrt(direcaoX * direcaoX + direcaoY * direcaoY);
             
-            x -= (int)direcaoX / (int)pita * maxSpeed;
-            y -= (int)direcaoY / (int)pita * maxSpeed;
+            try
+            {
+                x -= (int)direcaoX / (int)pita * maxSpeed;
+                y -= (int)direcaoY / (int)pita * maxSpeed;
+            }
+            catch (System.Exception)
+            {
+            
+            }
              
         }
 

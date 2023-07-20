@@ -9,6 +9,7 @@ public class Game
     {
         List<IBody> corpos = new List<IBody>();
         List<Zombie> zombies = new List<Zombie>();
+        List<Human> humans = new List<Human>();
 
         bool running = true;
 
@@ -25,12 +26,20 @@ public class Game
         form.FormBorderStyle = FormBorderStyle.None;
         form.Controls.Add(pb);
 
-        var zombieMain = new ZombieMain(500, 500);
-        var human = new Human();
+
+
+        var zombieMain = new ZombieMain();
+        var human = new Human(form);
         var zombie = new Zombie(human.x, human.y);
 
         // Create rectangle for displaying image.
 
+
+        for (int i = 0; i < 20; i++)
+        {
+            human = new Human(form);
+            humans.Add(human);
+        }
         var timer = new Timer();
         timer.Interval = 15;
 
@@ -40,26 +49,43 @@ public class Game
         {
             while (running)
             {
-                zombieMain.Draw(g,  new SolidBrush(Color.Red));
-                zombieMain.Update();    
-                human.Draw( g,  new SolidBrush(Color.Black));
-                human.escape(zombieMain.x, zombieMain.y);
+
+                zombieMain.Draw(g, new SolidBrush(Color.Red));
+                zombieMain.Update();
+
+                for (int i = 0; i < humans.Count; i++)
+                {
+                    humans[i].Draw(g, new SolidBrush(Color.Black));
+                    humans[i].escape(zombieMain.x, zombieMain.y);
+
+                    if (zombieMain.intersect(humans[i]))
+                    {
+                        humans[i].life -= zombieMain.attackDamage;
+                        if (humans[i].life < -0)
+                        {
+                            var zombie = new Zombie(humans[i].x, humans[i].y);
+                            var removed = humans.Remove(humans[i]);
+                            zombies.Add(zombie);
+                            i-=1;
+                        }
+                    }
+                }
+
+                // zombie.ToMoveAway(zombies, zombieMain.movespeed - 1);
                 
+
                 foreach (var z in zombies)
                 {
-                    z.Draw(g,  new SolidBrush(Color.Green));  
-                    z.Spaw(human.x, human.y);            
-                    z.go(zombieMain.x,
-                         zombieMain.y,
-                         zombieMain.movespeed - 1);    
+                    z.Draw(g, new SolidBrush(Color.Green));
                 }
+
+                zombie.DrunkZombie(zombies, zombieMain.x, zombieMain.y);
                 
                 pb.Refresh();
                 g.Clear(Color.Transparent);
                 Application.DoEvents();
             }
         };
-
 
         form.KeyDown += (s, e) =>
         {
@@ -69,16 +95,6 @@ public class Game
                 Application.Exit();
             }
             zombieMain.go(e);
-            if ((zombieMain.x >= human.x) && (zombieMain.y >= human.y))
-            {
-                human.life -= zombieMain.attackDamage;
-                if (human.life < -0)
-                {
-                    var zombie = new Zombie(human.x, human.y);
-                    human = new Human();
-                    zombies.Add(zombie);
-                }
-            }
 
         };
 
@@ -92,14 +108,9 @@ public class Game
             bmp = new Bitmap(pb.Width, pb.Height);
             g = Graphics.FromImage(bmp);
             pb.Image = bmp;
-            
 
             timer.Start();
         };
-
-
-
-
 
         form.KeyPreview = true;
 

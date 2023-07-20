@@ -5,9 +5,9 @@ using System.Windows.Forms;
 public class ZombieMain : IBody
 {
 
-    Rectangle zombieMain;
+    Rectangle zombie;
     int life = 20;
-    public int movespeed = 3;
+    public int movespeed = 2;
     public int attackDamage = 5;
     public int x;
     public int y;
@@ -18,9 +18,9 @@ public class ZombieMain : IBody
 
 
 
-    public ZombieMain(int x, int y)
+    public ZombieMain()
     {
-        zombieMain = new Rectangle(x, y, 20, 20);
+        zombie = new Rectangle(0, 0, 20, 20);
     }
 
     public void go(KeyEventArgs e)
@@ -64,13 +64,21 @@ public class ZombieMain : IBody
         if (goDown)
             y += movespeed;
 
-        zombieMain.Location = new Point(x, y);
+        zombie.Location = new Point(x, y);
 
     }
 
     public void Draw(Graphics g, SolidBrush color)
     {
-       g.FillRectangle(color, this.zombieMain);
+       g.FillRectangle(color, this.zombie);
+    }
+
+    public bool intersect(Human human)
+    {
+        Rectangle Rect = new Rectangle(human.x, human.y, human.weight, human.height);
+        if (this.zombie.IntersectsWith(Rect))
+            return true;
+        return false;
     }
 }
 
