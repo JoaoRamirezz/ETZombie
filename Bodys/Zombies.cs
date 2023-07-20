@@ -106,4 +106,12 @@ public class Zombie : IBody
     {
         throw new NotImplementedException();
     }
+
+    public bool intersect(Human human)
+    {
+        Rectangle Rect = new Rectangle(human.x, human.y, human.width, human.height);
+        if (this.zombie.IntersectsWith(Rect))
+            return true;
+        return false;
+    }
 }

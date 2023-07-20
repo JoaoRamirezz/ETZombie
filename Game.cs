@@ -7,7 +7,7 @@ public class Game
 {
     public void go()
     {
-        List<IBody> corpos = new List<IBody>();
+        List<IBody> bodys = new List<IBody>();
         List<Zombie> zombies = new List<Zombie>();
         List<Human> humans = new List<Human>();
 
@@ -40,6 +40,7 @@ public class Game
         {
             human = new Human(form);
             humans.Add(human);
+            bodys.Add(human);
         }
 
         var timer = new Timer();
@@ -54,15 +55,14 @@ public class Game
 
                 zombieMain.Draw(g, new SolidBrush(Color.Red));
                 zombieMain.Update();
+                foreach (var z in zombies)
+                    z.Draw(g, new SolidBrush(Color.Green));
 
                 for (int i = 0; i < humans.Count; i++)
                 {
                     humans[i].Draw(g, new SolidBrush(Color.Black));
-
                     humans[i].escape(zombieMain.x, zombieMain.y);
                     humans[i].Update();
-
-                    
 
                     if (zombieMain.intersect(humans[i]))
                     {
@@ -72,20 +72,15 @@ public class Game
                             var zombie = new Zombie(humans[i].x, humans[i].y);
                             humans.Remove(humans[i]);
                             zombies.Add(zombie);
-                            i-=1;
+                            bodys.Add(zombie);
+                            i -= 1;
                         }
                     }
                 }
-                
 
-
-
-                foreach (var z in zombies)
-                    z.Draw(g, new SolidBrush(Color.Green));     
-                        
 
                 zombie.DrunkZombie(zombies, zombieMain.x, zombieMain.y);
-                
+
                 pb.Refresh();
                 g.Clear(Color.Transparent);
                 Application.DoEvents();
