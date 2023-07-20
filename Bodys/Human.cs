@@ -11,8 +11,8 @@ public class Human : IBody
     Rectangle bar;
     Rectangle backbar;
 
-    public int maxlife = 50;
-    public int life = 50;
+    public int maxlife = 10;
+    public int life = 10;
     public int x;
     public int y;
     public int width = 20;
@@ -39,13 +39,16 @@ public class Human : IBody
 
         this.x = human.Location.X;
         this.y = human.Location.Y;
+    }
 
+    public void TakeDamage(bool damage, int attack){
+        if(damage)
+            Damage(attack);
     }
 
     public void Damage(int attack)
     {
         life -= attack;
-
         try
         {
             int d = life * width / maxlife;
@@ -55,7 +58,6 @@ public class Human : IBody
         }
 
         catch (System.Exception){}
-
     }
 
     public void Draw(Graphics g, SolidBrush color)

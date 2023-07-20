@@ -9,6 +9,7 @@ public class Zombie : IBody
     Random numberRandom = Random.Shared;
     Random randomFX = new Random();
     Random randomFY = new Random();
+    public int attackdamage = 1;
     public int x;
     public int y;
     double velX = 0;
@@ -18,12 +19,13 @@ public class Zombie : IBody
     double dj;
     double dL;
     double range;
+    bool humandamage = true;
 
     public Zombie(int x, int y)
     {
         zombie = new Rectangle(x, y, 20, 20);
         this.x = x;
-        this.y = y; 
+        this.y = y;
     }
 
     public void Draw(Graphics g, SolidBrush color)
@@ -32,16 +34,16 @@ public class Zombie : IBody
     }
 
     public void Spaw(int x, int y)
-    {
-        zombie.Location = new Point(x, y);
-    }
+        {
+            zombie.Location = new Point(x, y);
+        }
 
     private DateTime lastFrame = DateTime.Now;
     public void DrunkZombie(List<Zombie> zombieList, int zombieLiderX, int zombieLiderY)
     {
         float A = 100_000_000f;
         float B = 0.05f;
-        
+
         var FrameCurrent = DateTime.Now - lastFrame;
         lastFrame = DateTime.Now;
         var time = FrameCurrent.TotalSeconds;
@@ -55,13 +57,13 @@ public class Zombie : IBody
 
             var distFunc = modL * modL - 5 * modL;
             var leaderAttract = new SizeF(Ldx, Ldy) * distFunc * B / modL;
-            
+
             if (modL != 0)
             {
                 zombieList[i].velX = leaderAttract.Width;
                 zombieList[i].velY = leaderAttract.Height;
             }
-            
+
             FiX = 0;
             FiY = 0;
 
@@ -69,7 +71,7 @@ public class Zombie : IBody
             {
                 if (i == j)
                     continue;
-                
+
                 var dx = zombieList[i].zombie.X - zombieList[j].zombie.X;
                 var dy = zombieList[i].zombie.Y - zombieList[j].zombie.Y;
 
@@ -87,7 +89,7 @@ public class Zombie : IBody
                 FiX += dx * A / dist;
                 FiY += dy * A / dist;
             }
-                
+
             zombieList[i].velX += FiX * time;
             zombieList[i].velY += FiY * time;
         }
@@ -101,6 +103,7 @@ public class Zombie : IBody
             );
         }
     }
+
 
     public void Update()
     {

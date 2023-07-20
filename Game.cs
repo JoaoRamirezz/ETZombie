@@ -34,11 +34,12 @@ public class Game
         var police = new Police(form);
 
         var zombie = new Zombie(human.x, human.y);
+        var killed = false;
 
         // Create rectangle for displaying image.
 
 
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 100; i++)
         {
             human = new Human(form);
             humans.Add(human);
@@ -63,18 +64,31 @@ public class Game
 
                 zombieMain.Draw(g, new SolidBrush(Color.Red));
                 zombieMain.Update();
-                foreach (var z in zombies)
-                    z.Draw(g, new SolidBrush(Color.Green));
 
                 for (int i = 0; i < humans.Count; i++)
                 {
                     humans[i].Draw(g, new SolidBrush(Color.Black));
                     humans[i].escape(zombieMain.x, zombieMain.y);
                     humans[i].Update();
+                    humans[i].TakeDamage(zombieMain.intersect(humans[i]), zombieMain.attackDamage);
 
-                    if (zombieMain.intersect(humans[i]))
+                    if (humans[i].life <= 0)
                     {
-                        humans[i].Damage(zombieMain.attackDamage);
+                        var zombie = new Zombie(humans[i].x, humans[i].y);
+                        humans.Remove(humans[i]);
+                        zombies.Add(zombie);
+                        bodys.Add(zombie);
+                        i -= 1;
+                    }
+                }
+                foreach (var z in zombies)
+                {
+                    z.Draw(g, new SolidBrush(Color.Green));
+                       
+                    for (int i = 0; i < humans.Count; i++)
+                    {
+                        humans[i].TakeDamage(z.intersect(humans[i]), z.attackdamage);
+
                         if (humans[i].life <= 0)
                         {
                             var zombie = new Zombie(humans[i].x, humans[i].y);
@@ -82,21 +96,23 @@ public class Game
                             zombies.Add(zombie);
                             bodys.Add(zombie);
                             i -= 1;
+                            killed = true;
+                            break;
                         }
                     }
+                    if (killed)
+                        break;
                 }
+                killed = false;
 
-                for (int p = 0; p < polices.Count; p++)
+
+
+                foreach (var p in polices)
                 {
-                    polices[p].Draw(g, new SolidBrush(Color.Blue));
-                    polices[p].ToSearchFor(zombieMain.x, zombieMain.y);
-                    polices[p].Update();
-
+                    p.Draw(g, new SolidBrush(Color.Blue));
+                    p.ToSearchFor(zombieMain.x, zombieMain.y);
+                    p.Update();
                 }
-                
-                foreach (var z in zombies)
-                    z.Draw(g, new SolidBrush(Color.Green));     
-                        
 
                 zombie.DrunkZombie(zombies, zombieMain.x, zombieMain.y);
 
