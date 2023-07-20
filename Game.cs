@@ -87,11 +87,12 @@ public class Game
                 for (int p = 0; p < polices.Count; p++)
                 {
                     polices[p].Draw(g, new SolidBrush(Color.Blue));
-                    polices[p].ToSearchFor(zombieMain.x, zombieMain.y);
-                    polices[p].Update();
-
+                    // polices[p].ToSearchFor(zombieMain.x, zombieMain.y);
+                    // polices[p].Update();
                 }
-                
+
+                police.ToSearchFor(polices, zombieMain.x, zombieMain.y);
+                               
                 foreach (var z in zombies)
                     z.Draw(g, new SolidBrush(Color.Green));     
                         

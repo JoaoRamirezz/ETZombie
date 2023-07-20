@@ -31,11 +31,6 @@ public class Zombie : IBody
         g.FillRectangle(color, this.zombie);
     }
 
-    public void Spaw(int x, int y)
-    {
-        zombie.Location = new Point(x, y);
-    }
-
     private DateTime lastFrame = DateTime.Now;
     public void DrunkZombie(List<Zombie> zombieList, int zombieLiderX, int zombieLiderY)
     {
