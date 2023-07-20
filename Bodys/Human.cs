@@ -8,8 +8,11 @@ public class Human : IBody
 {
     Rectangle human;
     Random numberRandom = Random.Shared;
+    Rectangle bar;
+    Rectangle backbar;
 
-    public int life = 100;
+    public int maxlife = 50;
+    public int life = 50;
     public int x;
     public int y;
     public int width = 20;
@@ -31,19 +34,43 @@ public class Human : IBody
         width, 
         height);
 
+        backbar = new Rectangle(human.Location.X, human.Location.Y - 10, width, 5);
+        bar = new Rectangle(human.Location.X, human.Location.Y - 10, width, 5);
+
         this.x = human.Location.X;
         this.y = human.Location.Y;
+
+    }
+
+    public void Damage(int attack)
+    {
+        life -= attack;
+
+        try
+        {
+            int d = life * width / maxlife;
+            if (d < 0) 
+                d = 0;
+            bar.Size = new Size(d, 5);   
+        }
+
+        catch (System.Exception){}
 
     }
 
     public void Draw(Graphics g, SolidBrush color)
     {
         g.FillRectangle(color, this.human);
+        g.FillRectangle(new SolidBrush(Color.Black), backbar);
+        g.FillRectangle(new SolidBrush(Color.Red), bar);
     }
 
     public void Update()
     {
-        throw new NotImplementedException();
+        human.Location = new Point(x, y);
+
+        backbar.Location = new Point(x, y - 10);
+        bar.Location = new Point(x, y - 10);
     }
 
     public void escape(int zombieX, int zombieY)
@@ -73,12 +100,5 @@ public class Human : IBody
             }
              
         }
-
-        human.Location = new Point(x, y);
     }
-
-
-    // public void death(Form form){
-    //     form.Controls.Remove(human);
-    // }
 }

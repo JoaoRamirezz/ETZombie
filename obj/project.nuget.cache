@@ -1,15 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NshffnfeqhdFqFJLRhVV4j94xe9773juBR3qaeeM9bCcWWAFhLQZg9x6mjU/1F8GJtfdBOKSo4rbiLBrLNExPg==",
+  "dgSpecHash": "Jjar+cqukTt3GrvdFZuRdLQ+qri69nDxavf2Q/KNwMsoxqA9+EKWrrTtGmLNqzbSqSZltPj1GDxDVh0Q2rB5Lg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\disrct\\Desktop\\WindowsForms\\ETZombie\\ETZombie.csproj",
+  "projectFilePath": "C:\\Users\\disrct\\Desktop\\ETZombie\\ETZombie.csproj",
   "expectedPackageFiles": [],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problema ao ler o arquivo de cache C:\\Users\\disrct\\Desktop\\WindowsForms\\ETZombie\\obj\\project.nuget.cache: Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  "logs": []
 }
