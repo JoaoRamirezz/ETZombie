@@ -17,6 +17,7 @@ public class ZombieMain : IBody
     bool goDown = false;
     public int Width = 20;
     public int Height = 20;
+    bool humandamage = true;
 
 
 
@@ -81,6 +82,11 @@ public class ZombieMain : IBody
         if (this.zombie.IntersectsWith(Rect))
             return true;
         return false;
+    }
+
+    public void HumanDamage()
+    {
+        throw new NotImplementedException();
     }
 }
 
