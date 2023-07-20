@@ -10,6 +10,7 @@ public class Game
         List<IBody> bodys = new List<IBody>();
         List<Zombie> zombies = new List<Zombie>();
         List<Human> humans = new List<Human>();
+        List<Police> polices = new List<Police>();
 
         bool running = true;
 
@@ -29,18 +30,25 @@ public class Game
 
         var zombieMain = new ZombieMain();
 
-
         var human = new Human(form);
+        var police = new Police(form);
+
         var zombie = new Zombie(human.x, human.y);
 
         // Create rectangle for displaying image.
 
 
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 50; i++)
         {
             human = new Human(form);
             humans.Add(human);
             bodys.Add(human);
+        }
+
+        for (int p = 0; p < 10; p++)
+        {
+            police = new Police(form);
+            polices.Add(police);
         }
 
         var timer = new Timer();
@@ -78,6 +86,17 @@ public class Game
                     }
                 }
 
+                for (int p = 0; p < polices.Count; p++)
+                {
+                    polices[p].Draw(g, new SolidBrush(Color.Blue));
+                    polices[p].ToSearchFor(zombieMain.x, zombieMain.y);
+                    polices[p].Update();
+
+                }
+                
+                foreach (var z in zombies)
+                    z.Draw(g, new SolidBrush(Color.Green));     
+                        
 
                 zombie.DrunkZombie(zombies, zombieMain.x, zombieMain.y);
 
