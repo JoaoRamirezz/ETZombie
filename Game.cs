@@ -11,6 +11,7 @@ public class Game
         List<Zombie> zombies = new List<Zombie>();
         List<Human> humans = new List<Human>();
         List<Police> polices = new List<Police>();
+        List<Pistol> pistols = new List<Pistol>();
 
         bool running = true;
 
@@ -54,8 +55,6 @@ public class Game
 
         var timer = new Timer();
         timer.Interval = 15;
-
-
 
         Application.Idle += delegate
         {
@@ -108,6 +107,8 @@ public class Game
                 for (int p = 0; p < polices.Count; p++)
                 {
                     polices[p].Draw(g, new SolidBrush(Color.Blue));
+                    polices[p].ToSearchFor(zombieMain.x, zombieMain.y);
+                    polices[p].Update();
                 }
 
                 // foreach (var p in polices)
@@ -117,7 +118,7 @@ public class Game
                 //     // polices[p].Update();
                 // }
 
-                police.ToSearchFor(polices, zombieMain.x, zombieMain.y);
+                // police.ToSearchFor( zombieMain.x, zombieMain.y);
 
                 foreach (var z in zombies)
                     z.Draw(g, new SolidBrush(Color.Green));     
