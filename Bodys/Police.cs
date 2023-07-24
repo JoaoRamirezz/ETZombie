@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -9,7 +10,6 @@ public class Police : IBody
     private DateTime lastFrame = DateTime.Now;
     Rectangle bar;
     Rectangle backbar;
-    Bullet bullet;
     public int x;
     public int y;
     public int width = 20;
@@ -20,7 +20,7 @@ public class Police : IBody
     double FiY;
     double d;
     double range;
-    int pointOfView = 200;
+    int pointOfView = 500;
     double direcaoX;
     double direcaoY;
     int MovieSpeed = 1;
@@ -47,38 +47,43 @@ public class Police : IBody
     public void Draw(Graphics g, SolidBrush color)
     {
         g.FillRectangle(color, this.police);
-        pistol.Draw(g, new SolidBrush(Color.Orange));
-        // g.FillRectangle(new SolidBrush(Color.Black), backbar);
-        // g.FillRectangle(new SolidBrush(Color.Red), bar);
+        pistol.Draw(g, new SolidBrush(Color.Orange), new SolidBrush(Color.BlueViolet));
+        g.FillRectangle(new SolidBrush(Color.Black), backbar);
+        g.FillRectangle(new SolidBrush(Color.Red), bar);
     }
 
     public void Update()
     {
-        // police.Location = new Point(x, y);
-        
+        police.Location = new Point(x, y);
 
-        // backbar.Location = new Point(x, y - 10);
-        // bar.Location = new Point(x, y - 10);
 
+        backbar.Location = new Point(x, y - 10);
+        bar.Location = new Point(x, y - 10);
     }
 
-    public void ToSearchFor(int zombieX, int zombieY)
+    public void ToSearchFor(ZombieMain Joe ,Form form, List<Zombie> zombies)
     {
         x = police.Location.X;
         y = police.Location.Y;
 
-        d = Math.Pow((x - zombieX), 2) + Math.Pow((y - zombieY), 2);
+        d = Math.Pow((x - Joe.x), 2) + Math.Pow((y - Joe.y), 2);
 
         range = Math.Sqrt(d);
 
-        // pistol.Inactive();
-
         if (range <= pointOfView)
         {
-            pistol.Shot(zombieX, zombieY);
+            if (range <= pointOfView)
+            {
+                pistol.Shot(Joe.x, Joe.y, form);
+                if (numberRandom.Next(0, 250) == 2)
+                {
+                    pistol.Reload(form);
+                }
+                pistol.hit(zombies, Joe);
+            }
 
-            direcaoX = -(x - zombieX);
-            direcaoY = -(y - zombieY);
+            direcaoX = -(x - Joe.x);
+            direcaoY = -(y - Joe.y);
 
             double pita = Math.Sqrt(direcaoX * direcaoX + direcaoY * direcaoY);
 

@@ -12,6 +12,8 @@ public class Zombie : IBody
     public int attackdamage = 1;
     public int x;
     public int y;
+    public int Width = 20;
+    public int Height = 20;
     double velX = 0;
     double velY = 0;
     double FiX;
@@ -20,10 +22,11 @@ public class Zombie : IBody
     double dL;
     double range;
     bool humandamage = true;
+    public int life = 20;
 
     public Zombie(int x, int y)
     {
-        zombie = new Rectangle(x, y, 20, 20);
+        zombie = new Rectangle(x, y, Width, Height);
         this.x = x;
         this.y = y;
     }
@@ -98,7 +101,6 @@ public class Zombie : IBody
             );
         }
     }
-
 
     public void Update()
     {

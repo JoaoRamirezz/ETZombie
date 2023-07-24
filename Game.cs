@@ -107,7 +107,7 @@ public class Game
                 for (int p = 0; p < polices.Count; p++)
                 {
                     polices[p].Draw(g, new SolidBrush(Color.Blue));
-                    polices[p].ToSearchFor(zombieMain.x, zombieMain.y);
+                    polices[p].ToSearchFor(zombieMain, form, zombies);
                     polices[p].Update();
                 }
 
@@ -121,7 +121,9 @@ public class Game
                 // police.ToSearchFor( zombieMain.x, zombieMain.y);
 
                 foreach (var z in zombies)
-                    z.Draw(g, new SolidBrush(Color.Green));     
+                {
+                    z.Draw(g, new SolidBrush(Color.Green));    
+                }
                         
 
                 zombie.DrunkZombie(zombies, zombieMain.x, zombieMain.y);

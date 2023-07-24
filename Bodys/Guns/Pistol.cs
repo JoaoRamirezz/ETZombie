@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class Pistol : IGun
 {
+    Rectangle zombieRec;
     private Police police;
     Rectangle pistol;
     Rectangle bullet;
@@ -14,6 +15,7 @@ public class Pistol : IGun
     int height = 10;
     int x => police.police.Location.X;
     int y => police.police.Location.Y;
+    int damage = 5;
 
     public Pistol(Form form, Police police)
     {
@@ -22,14 +24,14 @@ public class Pistol : IGun
         bullet = new Rectangle(x, y, width, height);
     }
 
-    public void Draw(Graphics g, SolidBrush color)
+    public void Draw(Graphics g, SolidBrush color, SolidBrush colorBullet)
     {
         g.FillRectangle(color, this.pistol);
-        g.FillRectangle(color, this.bullet);
+        g.FillRectangle(colorBullet, this.bullet);
     }
 
 
-    public void Shot(int zombieLiderX, int zombieLiderY)
+    public void Shot(int zombieLiderX, int zombieLiderY, Form form)
     {
         var BulletX = bullet.Location.X;
         var BulletY = bullet.Location.Y;
@@ -38,30 +40,42 @@ public class Pistol : IGun
         var direcaoY = (y - zombieLiderY);
 
         var pita = Math.Sqrt(direcaoX * direcaoX + direcaoY * direcaoY);
-   
-        BulletX -= (int)((direcaoX) / pita * VeloBullet);   
-        BulletY -= (int)((direcaoY) / pita * VeloBullet); 
-              
+
+        BulletX -= (int)((direcaoX) / pita * VeloBullet);
+        BulletY -= (int)((direcaoY) / pita * VeloBullet);
+
         bullet.Location = new Point(BulletX, BulletY);
     }
 
-    // public void Inactive()
-    // {
-    //     var BulletX = pistol.Location.X;
-    //     var BulletY = pistol.Location.Y;
-
-    //     bullet.Update(BulletX, BulletY);
-    // }
-
-    public void Reload()
+    public void hit(List<Zombie>zombies, ZombieMain Joe)
     {
+        foreach (var z in zombies)
+        {  
+            zombieRec = new Rectangle(z.x, z.y, z.Width, z.Height);
+            if(bullet.IntersectsWith(zombieRec))
+            {
+                z.life -= damage;
+                if(z.life <= 0)
+                    zombies.Remove(z);
+                return;
+            }
+        }
 
+
+        zombieRec = new Rectangle(Joe.x, Joe.y, Joe.Width, Joe.Height);
+        if(bullet.IntersectsWith(zombieRec))
+        {
+            Joe.life -= damage;
+            return;
+        }
     }
 
-    public void Update(Police police)
+    public void Reload(Form form)
     {
-        police = this.police;
-        pistol.Location = new Point(x, y);
+        if (bullet.Location.X <= form.Width || bullet.Location.Y <= form.Height)
+        {         
+            bullet.Location = new Point(x, y);
+        }    
     }
 
     public void Update(int x, int y)

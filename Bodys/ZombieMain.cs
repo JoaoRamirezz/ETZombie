@@ -4,9 +4,8 @@ using System.Windows.Forms;
 
 public class ZombieMain : IBody
 {
-
     Rectangle zombie;
-    int life = 20;
+    public int life = 20;
     public int movespeed = 2;
     public int attackDamage = 1;
     public int x;
