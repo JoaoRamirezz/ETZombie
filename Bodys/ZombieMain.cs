@@ -7,6 +7,10 @@ public class ZombieMain : IBody
 
     Rectangle zombie;
     Rectangle mask;
+    Image zombieImg;
+
+
+    int distanceImg = 3;
     int life = 20;
     public int movespeed = 2;
     public int attackDamage = 1;
@@ -22,12 +26,14 @@ public class ZombieMain : IBody
     public bool colision = false;
     public int SideX;
     public int SideY;
+    bool run = false;
 
 
 
-    public ZombieMain()
+    public ZombieMain(Image img)
     {
-        zombie = new Rectangle(0, 0, Width, Height);
+        zombie = new Rectangle(0, 0, 25, 25);
+        zombieImg = img;
     }
 
 
@@ -39,18 +45,32 @@ public class ZombieMain : IBody
         SideX = velX;
         SideY = velY;
 
+
+
         if (e.KeyCode == Keys.D)
+        {
+            run = true;
             goRight = true;
+        }
 
         if (e.KeyCode == Keys.A)
+        {
+            run = true;
             goLeft = true;
 
+        }
+
         if (e.KeyCode == Keys.S)
+        {
             goDown = true;
+            run = true;
+        }
 
         if (e.KeyCode == Keys.W)
+        {
             goTop = true;
-
+            run = true;
+        }
         Update();
 
     }
@@ -59,16 +79,28 @@ public class ZombieMain : IBody
     public void stop(KeyEventArgs e)
     {
         if (e.KeyCode == Keys.D)
+        {
+            run = false;
             goRight = false;
+        }
 
         if (e.KeyCode == Keys.A)
+        {
+            run = false;
             goLeft = false;
+        }
 
         if (e.KeyCode == Keys.S)
+        {
+            run = false;
             goDown = false;
+        }
 
         if (e.KeyCode == Keys.W)
+        {
+            run = false;
             goTop = false;
+        }
     }
 
 
@@ -82,6 +114,10 @@ public class ZombieMain : IBody
             y -= movespeed;
         if (goDown)
             y += movespeed;
+        if(run)
+            distanceImg += 40;
+        if(distanceImg >= 140)
+            distanceImg = 2;
 
         zombie.Location = new Point(x, y);
         
@@ -91,6 +127,13 @@ public class ZombieMain : IBody
     public void Draw(Graphics g, SolidBrush color)
     {
        g.FillRectangle(color, this.zombie);
+    }
+
+
+    public void draw(Graphics g)
+    {
+        GraphicsUnit units = GraphicsUnit.Pixel;
+       g.DrawImage(zombieImg, zombie, distanceImg,0,35,55,units);
     }
 
 
@@ -108,6 +151,7 @@ public class ZombieMain : IBody
             return true;
         return false;
     }
+
 
     public bool CollideWallY(Wall wall)
     {
