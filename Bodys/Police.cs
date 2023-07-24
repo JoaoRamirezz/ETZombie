@@ -75,12 +75,7 @@ public class Police : IBody
 
         if (range <= pointOfView)
         {
-            // var FrameCurrent = DateTime.Now - lastFramePolice;
-            // lastFramePolice = DateTime.Now;
-            // var time = FrameCurrent.TotalSeconds;
-
-            // if(time >= 10)
-                pistol.Shot(zombieX, zombieY);
+            pistol.Shot(zombieX, zombieY);
 
             direcaoX = -(x - zombieX);
             direcaoY = -(y - zombieY);

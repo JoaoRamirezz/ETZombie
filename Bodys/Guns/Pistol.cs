@@ -7,7 +7,7 @@ public class Pistol : IGun
 {
     private Police police;
     Rectangle pistol;
-    Bullet bullet;
+    Rectangle bullet;
     Graphics g = null;
     double VeloBullet = 15;
     int width = 10;
@@ -19,21 +19,20 @@ public class Pistol : IGun
     {
         this.police = police;
         pistol = new Rectangle(x, y, width, height);
-        bullet = new Bullet(form, police);
+        bullet = new Rectangle(x, y, width, height);
     }
 
     public void Draw(Graphics g, SolidBrush color)
     {
         g.FillRectangle(color, this.pistol);
+        g.FillRectangle(color, this.bullet);
     }
 
 
     public void Shot(int zombieLiderX, int zombieLiderY)
     {
-        bullet.Draw(g);
-
-        var BulletX = bullet.bulletX;
-        var BulletY = bullet.bulletY;
+        var BulletX = bullet.Location.X;
+        var BulletY = bullet.Location.Y;
 
         var direcaoX = (x - zombieLiderX);
         var direcaoY = (y - zombieLiderY);
@@ -43,16 +42,16 @@ public class Pistol : IGun
         BulletX -= (int)((direcaoX) / pita * VeloBullet);   
         BulletY -= (int)((direcaoY) / pita * VeloBullet); 
               
-        bullet.Update(BulletX, BulletY);
+        bullet.Location = new Point(BulletX, BulletY);
     }
 
-    public void Inactive()
-    {
-        var BulletX = pistol.Location.X;
-        var BulletY = pistol.Location.Y;
+    // public void Inactive()
+    // {
+    //     var BulletX = pistol.Location.X;
+    //     var BulletY = pistol.Location.Y;
 
-        bullet.Update(BulletX, BulletY);
-    }
+    //     bullet.Update(BulletX, BulletY);
+    // }
 
     public void Reload()
     {
