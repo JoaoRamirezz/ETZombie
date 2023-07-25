@@ -4,10 +4,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
-
 public class Game
 {
-    
     private List<IBody> bodys;
     private List<Zombie> zombies;
     private List<Human> humans;
@@ -24,6 +22,9 @@ public class Game
 
     public void go()
     {
+        Start start = new Start();
+        start.go();
+
         bodys = new List<IBody>();
         zombies = new List<Zombie>();
         humans = new List<Human>();
