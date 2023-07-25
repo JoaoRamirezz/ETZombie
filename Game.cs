@@ -12,6 +12,7 @@ public class Game
     private List<Zombie> zombies;
     private List<Human> humans;
     private List<Police> polices;
+    private List<Pistol> pistols;
 
 
     private ZombieMain zombieMain;
@@ -27,6 +28,7 @@ public class Game
         zombies = new List<Zombie>();
         humans = new List<Human>();
         polices = new List<Police>();
+        pistols = new List<Pistol>();
 
         bool running = true;
 
