@@ -32,7 +32,7 @@ public class ZombieMain : IBody
 
     public ZombieMain(Image img)
     {
-        zombie = new Rectangle(0, 0, 25, 25);
+        zombie = new Rectangle(50, 50, 25, 25);
         zombieImg = img;
     }
 

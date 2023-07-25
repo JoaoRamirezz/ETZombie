@@ -7,7 +7,8 @@ using System.Collections.Generic;
 
 public class Game
 {
-    
+    private Rectangle bullet;
+
     private List<IBody> bodys;
     private List<Zombie> zombies;
     private List<Human> humans;
@@ -38,7 +39,7 @@ public class Game
         Graphics g = null;
         Bitmap bmp = null;
         Image Joe = Image.FromFile("imagens/JoeSprites.png");
-        Rectangle ImgRec = new Rectangle(0,0,120,120);
+        Rectangle ImgRec = new Rectangle(0, 0, 120, 120);
 
 
         var form = new Form();
@@ -58,10 +59,9 @@ public class Game
 
 
         var killed = false;
-        var brains = 0;
 
 
-        generateBots(100,10,form);
+        generateBots(100, 10, form);
 
 
         var timer = new Timer();
@@ -75,7 +75,7 @@ public class Game
             {
 
                 GraphicsUnit units = GraphicsUnit.Pixel;
-                g.DrawString("Brains: " + brains.ToString(), new Font("arial", 10), Brushes.Black, 0, 0);
+                g.DrawString("Brains: " + zombies.Count.ToString(), new Font("arial", 20), Brushes.Black, 0, 0);
                 zombieMain.draw(g);
                 zombieMain.Update();
 
@@ -109,9 +109,17 @@ public class Game
                     {
                         newZombie(humans[i]);
                         i -= 1;
-                        brains += 1;
                     }
-                } 
+                }
+
+
+                foreach (var p in polices)
+                {
+                    p.Draw(g, new SolidBrush(Color.Blue));
+                    p.ToSearchFor(zombieMain, form, zombies);
+                    p.Update();
+                }
+
 
                 foreach (var z in zombies)
                 {
@@ -125,28 +133,28 @@ public class Game
                         {
                             newZombie(humans[i]);
                             i -= 1;
-                            brains += 1;
                             killed = true;
                             break;
                         }
                     }
+
+                    foreach (var p in pistols)
+                    {
+                        if (p.hitZombie(z))
+                        {
+                            z.Damage(p.damage);
+                            if (z.life >= 0)
+                                zombies.Remove(z);
+                        }
+                    }
+
                     if (killed)
                         break;
                 }
                 killed = false;
 
-                foreach (var p in pistols)
-                {
-                    p.hit(zombies, zombieMain);    
-                }
 
 
-                foreach (var p in polices)
-                {
-                    p.Draw(g, new SolidBrush(Color.Blue));
-                    p.ToSearchFor(zombieMain, form, zombies);
-                    p.Update();
-                }
 
                 zombie.DrunkZombie(zombies, zombieMain.x, zombieMain.y);
 
@@ -163,7 +171,7 @@ public class Game
                 running = false;
                 Application.Exit();
             }
-            zombieMain.go(e,wall);
+            zombieMain.go(e, wall);
 
         };
 
