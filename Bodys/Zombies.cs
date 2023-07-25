@@ -33,13 +33,21 @@ public class Zombie : IBody
 
     public void Draw(Graphics g, SolidBrush color)
     {
+        // if (this.zombie.Location.X < -5000 || this.zombie.Location.Y > 5000)
+        //     return;
+
         g.FillRectangle(color, this.zombie);
     }
+
+    public void Spaw(int x, int y)
+        {
+            zombie.Location = new Point(x, y);
+        }
 
     private DateTime lastFrame = DateTime.Now;
     public void DrunkZombie(List<Zombie> zombieList, int zombieLiderX, int zombieLiderY)
     {
-        float A = 100_000_000f;
+        float A = 300_000_000f;
         float B = 0.05f;
 
         var FrameCurrent = DateTime.Now - lastFrame;
@@ -90,6 +98,17 @@ public class Zombie : IBody
 
             zombieList[i].velX += FiX * time;
             zombieList[i].velY += FiY * time;
+
+            int speed = 500;
+            if (zombieList[i].velX > speed)
+                zombieList[i].velX = speed;
+            else if (zombieList[i].velX < -speed)
+                zombieList[i].velX = -speed;
+
+            if (zombieList[i].velY > speed)
+                zombieList[i].velY = speed;
+            else if (zombieList[i].velY < -speed)
+                zombieList[i].velY = -speed;
         }
 
         for (int i = 0; i < zombieList.Count; i++)

@@ -4,7 +4,9 @@ using System.Windows.Forms;
 
 public class ZombieMain : IBody
 {
+
     Rectangle zombie;
+    Rectangle mask;
     public int life = 20;
     public int movespeed = 2;
     public int attackDamage = 1;
@@ -17,6 +19,9 @@ public class ZombieMain : IBody
     public int Width = 20;
     public int Height = 20;
     bool humandamage = true;
+    public bool colision = false;
+    public int SideX;
+    public int SideY;
 
 
 
@@ -25,8 +30,15 @@ public class ZombieMain : IBody
         zombie = new Rectangle(0, 0, Width, Height);
     }
 
-    public void go(KeyEventArgs e)
+
+    public void go(KeyEventArgs e, Wall wall)
     {
+        int velX = e.KeyCode == Keys.A ? movespeed * -1 : e.KeyCode == Keys.D ? movespeed : 0;
+        int velY = e.KeyCode == Keys.W ? movespeed * -1 : e.KeyCode == Keys.S ? movespeed : 0;
+
+        SideX = velX;
+        SideY = velY;
+
         if (e.KeyCode == Keys.D)
             goRight = true;
 
@@ -38,7 +50,11 @@ public class ZombieMain : IBody
 
         if (e.KeyCode == Keys.W)
             goTop = true;
+
+        Update();
+
     }
+
 
     public void stop(KeyEventArgs e)
     {
@@ -67,25 +83,37 @@ public class ZombieMain : IBody
             y += movespeed;
 
         zombie.Location = new Point(x, y);
-
+        
     }
+
 
     public void Draw(Graphics g, SolidBrush color)
     {
        g.FillRectangle(color, this.zombie);
     }
 
+
     public bool intersect(Human human)
     {
         Rectangle Rect = new Rectangle(human.x, human.y, human.width, human.height);
-        if (this.zombie.IntersectsWith(Rect))
+        return this.zombie.IntersectsWith(Rect);
+    }
+
+
+    public bool CollideWallX(Wall wall)
+    {
+        mask = new Rectangle(zombie.X, zombie.Y, zombie.Width, zombie.Height);
+        if(wall.Colision(mask) && goLeft || wall.Colision(mask) && goRight)
             return true;
         return false;
     }
 
-    public void HumanDamage()
+    public bool CollideWallY(Wall wall)
     {
-        throw new NotImplementedException();
+        mask = new Rectangle(zombie.X, zombie.Y, zombie.Width, zombie.Height);
+        if(wall.Colision(mask) && goTop || wall.Colision(mask) && goDown)
+            return true;
+        return false;
     }
 }
 

@@ -1,3 +1,5 @@
+#pragma warning disable
+
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -5,13 +7,29 @@ using System.Collections.Generic;
 
 public class Game
 {
+
+
+    private List<IBody> bodys;
+    private List<Zombie> zombies;
+    private List<Human> humans;
+    private List<Police> polices;
+    private List<Pistol> pistols;
+
+
+    private ZombieMain zombieMain;
+    private Human human;
+    private Police police;
+    private Zombie zombie;
+    private Wall wall;
+
+
     public void go()
     {
-        List<IBody> bodys = new List<IBody>();
-        List<Zombie> zombies = new List<Zombie>();
-        List<Human> humans = new List<Human>();
-        List<Police> polices = new List<Police>();
-        List<Pistol> pistols = new List<Pistol>();
+        bodys = new List<IBody>();
+        zombies = new List<Zombie>();
+        humans = new List<Human>();
+        polices = new List<Police>();
+        pistols = new List<Pistol>();
 
         bool running = true;
 
@@ -29,29 +47,19 @@ public class Game
         form.Controls.Add(pb);
 
 
-        var zombieMain = new ZombieMain();
+        zombieMain = new ZombieMain();
+        human = new Human(form);
+        police = new Police(form);
+        zombie = new Zombie(human.x, human.y);
+        wall = new Wall(50,50,30,100);
 
-        var human = new Human(form);
-        var police = new Police(form);
 
-        var zombie = new Zombie(human.x, human.y);
         var killed = false;
+        var brains = 0;
 
-        // Create rectangle for displaying image.
 
+        generateBots(100,10,form);
 
-        for (int i = 0; i < 100; i++)
-        {
-            human = new Human(form);
-            humans.Add(human);
-            bodys.Add(human);
-        }
-
-        for (int p = 0; p < 10; p++)
-        {
-            police = new Police(form);
-            polices.Add(police);
-        }
 
         var timer = new Timer();
         timer.Interval = 15;
@@ -61,8 +69,28 @@ public class Game
             while (running)
             {
 
+                g.DrawString("Brains: " + brains.ToString(), new Font("arial", 10), Brushes.Black, 0, 0);
                 zombieMain.Draw(g, new SolidBrush(Color.Red));
                 zombieMain.Update();
+
+                if(zombieMain.CollideWallX(wall))
+                {
+                    if(zombieMain.x > wall.X)
+                        zombieMain.x = wall.X + wall.Width;
+                    else
+                        zombieMain.x = wall.X - zombieMain.Height;
+                }
+
+                if(zombieMain.CollideWallY(wall))
+                {
+                    if(zombieMain.y < wall.Y)
+                        zombieMain.y = wall.Y - zombieMain.Height;
+                    else
+                        zombieMain.y = wall.Y + wall.Height;
+                }
+
+
+                wall.Draw(g, new SolidBrush(Color.Orange));
 
                 for (int i = 0; i < humans.Count; i++)
                 {
@@ -73,28 +101,25 @@ public class Game
 
                     if (humans[i].life <= 0)
                     {
-                        var zombie = new Zombie(humans[i].x, humans[i].y);
-                        humans.Remove(humans[i]);
-                        zombies.Add(zombie);
-                        bodys.Add(zombie);
+                        newZombie(humans[i]);
                         i -= 1;
+                        brains += 1;
                     }
-                }
+                } 
+
                 foreach (var z in zombies)
                 {
                     z.Draw(g, new SolidBrush(Color.Green));
-                       
+
                     for (int i = 0; i < humans.Count; i++)
                     {
                         humans[i].TakeDamage(z.intersect(humans[i]), z.attackdamage);
 
                         if (humans[i].life <= 0)
                         {
-                            var zombie = new Zombie(humans[i].x, humans[i].y);
-                            humans.Remove(humans[i]);
-                            zombies.Add(zombie);
-                            bodys.Add(zombie);
+                            newZombie(humans[i]);
                             i -= 1;
+                            brains += 1;
                             killed = true;
                             break;
                         }
@@ -104,27 +129,12 @@ public class Game
                 }
                 killed = false;
 
-                for (int p = 0; p < polices.Count; p++)
+                foreach (var p in polices)
                 {
-                    polices[p].Draw(g, new SolidBrush(Color.Blue));
-                    polices[p].ToSearchFor(zombieMain, form, zombies);
-                    polices[p].Update();
+                    p.Draw(g, new SolidBrush(Color.Blue));
+                    p.ToSearchFor(zombieMain, form, zombies);
+                    p.Update();
                 }
-
-                // foreach (var p in polices)
-                // {
-                //     polices[p].Draw(g, new SolidBrush(Color.Blue));
-                //     // polices[p].ToSearchFor(zombieMain.x, zombieMain.y);
-                //     // polices[p].Update();
-                // }
-
-                // police.ToSearchFor( zombieMain.x, zombieMain.y);
-
-                foreach (var z in zombies)
-                {
-                    z.Draw(g, new SolidBrush(Color.Green));    
-                }
-                        
 
                 zombie.DrunkZombie(zombies, zombieMain.x, zombieMain.y);
 
@@ -141,7 +151,7 @@ public class Game
                 running = false;
                 Application.Exit();
             }
-            zombieMain.go(e);
+            zombieMain.go(e,wall);
 
         };
 
@@ -158,7 +168,32 @@ public class Game
         };
 
         form.KeyPreview = true;
-
         Application.Run(form);
+    }
+
+    public void newZombie(Human human)
+    {
+        var zombie = new Zombie(human.x, human.y);
+        humans.Remove(human);
+        zombies.Add(zombie);
+        bodys.Add(zombie);
+    }
+
+
+    public void generateBots(int qttHumans, int qttPolices, Form form)
+    {
+        for (int i = 0; i < qttHumans; i++)
+        {
+            human = new Human(form);
+            humans.Add(human);
+            bodys.Add(human);
+        }
+
+        for (int p = 0; p < qttPolices; p++)
+        {
+            police = new Police(form);
+            polices.Add(police);
+        }
+
     }
 }
