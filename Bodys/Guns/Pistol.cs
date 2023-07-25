@@ -7,6 +7,7 @@ public class Pistol : IGun
 {
     Rectangle zombieRec;
     private Police police;
+    private ZombieMain zombieMain;
     Rectangle pistol;
     Rectangle bullet;
     Graphics g = null;
@@ -21,7 +22,7 @@ public class Pistol : IGun
     {
         this.police = police;
         pistol = new Rectangle(x, y, width, height);
-        bullet = new Rectangle(x, y, width, height);
+        bullet = new Rectangle(x, y, 7, 7);
     }
 
     public void Draw(Graphics g, SolidBrush color, SolidBrush colorBullet)
@@ -47,15 +48,15 @@ public class Pistol : IGun
         bullet.Location = new Point(BulletX, BulletY);
     }
 
-    public void hit(List<Zombie>zombies, ZombieMain Joe)
+    public void hit(List<Zombie> zombies, ZombieMain Joe)
     {
         foreach (var z in zombies)
-        {  
+        {
             zombieRec = new Rectangle(z.x, z.y, z.Width, z.Height);
-            if(bullet.IntersectsWith(zombieRec))
+            if (bullet.IntersectsWith(zombieRec))
             {
                 z.life -= damage;
-                if(z.life <= 0)
+                if (z.life <= 0)
                     zombies.Remove(z);
                 return;
             }
@@ -63,7 +64,7 @@ public class Pistol : IGun
 
 
         zombieRec = new Rectangle(Joe.x, Joe.y, Joe.Width, Joe.Height);
-        if(bullet.IntersectsWith(zombieRec))
+        if (bullet.IntersectsWith(zombieRec))
         {
             Joe.life -= damage;
             return;
@@ -72,10 +73,7 @@ public class Pistol : IGun
 
     public void Reload(Form form)
     {
-        if (bullet.Location.X <= form.Width || bullet.Location.Y <= form.Height)
-        {         
-            bullet.Location = new Point(x, y);
-        }    
+        bullet.Location = new Point(x, y);
     }
 
     public void Update(int x, int y)

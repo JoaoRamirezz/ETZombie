@@ -4,12 +4,9 @@ using System.Windows.Forms;
 
 public class ZombieMain : IBody
 {
-
     Rectangle zombie;
     Rectangle mask;
     Image zombieImg;
-
-
     int distanceImg = 3;
     public int life = 20;
     public int movespeed = 2;
@@ -28,14 +25,11 @@ public class ZombieMain : IBody
     public int SideY;
     bool run = false;
 
-
-
     public ZombieMain(Image img)
     {
         zombie = new Rectangle(0, 0, 25, 25);
         zombieImg = img;
     }
-
 
     public void go(KeyEventArgs e, Wall wall)
     {
@@ -44,8 +38,6 @@ public class ZombieMain : IBody
 
         SideX = velX;
         SideY = velY;
-
-
 
         if (e.KeyCode == Keys.D)
         {
@@ -74,7 +66,6 @@ public class ZombieMain : IBody
         Update();
 
     }
-
 
     public void stop(KeyEventArgs e)
     {
@@ -118,16 +109,13 @@ public class ZombieMain : IBody
         if(distanceImg >= 140)
             distanceImg = 2;
 
-        zombie.Location = new Point(x, y);
-        
+        zombie.Location = new Point(x, y);    
     }
-
 
     public void Draw(Graphics g, SolidBrush color)
     {
        g.FillRectangle(color, this.zombie);
     }
-
 
     public void draw(Graphics g)
     {
@@ -135,13 +123,11 @@ public class ZombieMain : IBody
        g.DrawImage(zombieImg, zombie, distanceImg,0,35,55,units);
     }
 
-
     public bool intersect(Human human)
     {
         Rectangle Rect = new Rectangle(human.x, human.y, human.width, human.height);
         return this.zombie.IntersectsWith(Rect);
     }
-
 
     public bool CollideWallX(Wall wall)
     {
