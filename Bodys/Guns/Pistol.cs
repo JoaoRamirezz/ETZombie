@@ -15,7 +15,7 @@ public class Pistol : IGun
     int height = 10;
     int x => police.police.Location.X;
     int y => police.police.Location.Y;
-    int damage = 5;
+    int damage = 15;
 
     public Pistol(Form form, Police police)
     {

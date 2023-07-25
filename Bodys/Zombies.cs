@@ -22,7 +22,7 @@ public class Zombie : IBody
     double dL;
     double range;
     bool humandamage = true;
-    public int life = 20;
+    public int life = 5;
 
     public Zombie(int x, int y)
     {

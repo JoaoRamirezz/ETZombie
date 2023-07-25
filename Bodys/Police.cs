@@ -79,7 +79,6 @@ public class Police : IBody
                 {
                     pistol.Reload(form);
                 }
-                pistol.hit(zombies, Joe);
             }
 
             direcaoX = -(x - Joe.x);

@@ -7,8 +7,7 @@ using System.Collections.Generic;
 
 public class Game
 {
-
-
+    
     private List<IBody> bodys;
     private List<Zombie> zombies;
     private List<Human> humans;
@@ -35,23 +34,27 @@ public class Game
 
         ApplicationConfiguration.Initialize();
 
-        PictureBox pb = new PictureBox();
-        pb.Dock = DockStyle.Fill;
 
         Graphics g = null;
         Bitmap bmp = null;
+        Image Joe = Image.FromFile("imagens/JoeSprites.png");
+        Rectangle ImgRec = new Rectangle(0,0,120,120);
+
 
         var form = new Form();
         form.WindowState = FormWindowState.Maximized;
         form.FormBorderStyle = FormBorderStyle.None;
+
+        PictureBox pb = new PictureBox();
+        pb.Dock = DockStyle.Fill;
         form.Controls.Add(pb);
 
 
-        zombieMain = new ZombieMain();
+        zombieMain = new ZombieMain(Joe);
         human = new Human(form);
         police = new Police(form);
         zombie = new Zombie(human.x, human.y);
-        wall = new Wall(50,50,30,100);
+        // wall = new Wall(50,50,30,100);
 
 
         var killed = false;
@@ -62,35 +65,38 @@ public class Game
 
 
         var timer = new Timer();
-        timer.Interval = 15;
+        timer.Interval = 30;
+
+
 
         Application.Idle += delegate
         {
             while (running)
             {
 
+                GraphicsUnit units = GraphicsUnit.Pixel;
                 g.DrawString("Brains: " + brains.ToString(), new Font("arial", 10), Brushes.Black, 0, 0);
-                zombieMain.Draw(g, new SolidBrush(Color.Red));
+                zombieMain.draw(g);
                 zombieMain.Update();
 
-                if(zombieMain.CollideWallX(wall))
-                {
-                    if(zombieMain.x > wall.X)
-                        zombieMain.x = wall.X + wall.Width;
-                    else
-                        zombieMain.x = wall.X - zombieMain.Height;
-                }
+                // if(zombieMain.CollideWallX(wall))
+                // {
+                //     if(zombieMain.x > wall.X)
+                //         zombieMain.x = wall.X + wall.Width;
+                //     else
+                //         zombieMain.x = wall.X - zombieMain.Height;
+                // }
 
-                if(zombieMain.CollideWallY(wall))
-                {
-                    if(zombieMain.y < wall.Y)
-                        zombieMain.y = wall.Y - zombieMain.Height;
-                    else
-                        zombieMain.y = wall.Y + wall.Height;
-                }
+                // if(zombieMain.CollideWallY(wall))
+                // {
+                //     if(zombieMain.y < wall.Y)
+                //         zombieMain.y = wall.Y - zombieMain.Height;
+                //     else
+                //         zombieMain.y = wall.Y + wall.Height;
+                // }
 
 
-                wall.Draw(g, new SolidBrush(Color.Orange));
+                // wall.Draw(g, new SolidBrush(Color.Orange));
 
                 for (int i = 0; i < humans.Count; i++)
                 {
@@ -128,6 +134,12 @@ public class Game
                         break;
                 }
                 killed = false;
+
+                foreach (var p in pistols)
+                {
+                    p.hit(zombies, zombieMain);    
+                }
+
 
                 foreach (var p in polices)
                 {
@@ -170,6 +182,9 @@ public class Game
         form.KeyPreview = true;
         Application.Run(form);
     }
+
+
+
 
     public void newZombie(Human human)
     {
