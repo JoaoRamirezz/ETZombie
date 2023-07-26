@@ -7,17 +7,12 @@ public class Police : IBody
 {
     public Rectangle police;
     Random numberRandom = Random.Shared;
-    private DateTime lastFrame = DateTime.Now;
     Rectangle bar;
     Rectangle backbar;
     public int x;
     public int y;
     public int width = 20;
     public int height = 20;
-    double velX = 0;
-    double velY = 0;
-    double FiX;
-    double FiY;
     double d;
     double range;
     int pointOfView = 500;
@@ -25,10 +20,8 @@ public class Police : IBody
     double direcaoY;
     int MovieSpeed = 1;
     Pistol pistol;
-    Graphics g = null;
-    private DateTime lastFramePolice = DateTime.Now;
 
-    public Police(Form form)
+    public Police(Form form, List<Pistol> pistols)
     {
         police = new Rectangle(
             numberRandom.Next(0, 1200),
@@ -40,6 +33,7 @@ public class Police : IBody
         backbar = new Rectangle(police.Location.X, police.Location.Y - 10, width, 5);
         bar = new Rectangle(police.Location.X, police.Location.Y - 10, width, 5);
         pistol = new Pistol(form, this);
+        pistols.Add(pistol);
 
     }
 

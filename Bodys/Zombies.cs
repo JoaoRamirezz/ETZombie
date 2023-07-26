@@ -9,9 +9,6 @@ public class Zombie : IBody
     Rectangle bar;
     Rectangle backbar;
     Rectangle zombie;
-    Random numberRandom = Random.Shared;
-    Random randomFX = new Random();
-    Random randomFY = new Random();
     public int attackdamage = 1;
     public int x;
     public int y;
@@ -21,10 +18,6 @@ public class Zombie : IBody
     double velY = 0;
     double FiX;
     double FiY;
-    double dj;
-    double dL;
-    double range;
-    bool humandamage = true;
     public int life = 5;
     public int maxlife = 5;
 
@@ -54,6 +47,11 @@ public class Zombie : IBody
     public void Spaw(int x, int y)
     {
         zombie.Location = new Point(x, y);
+    }
+
+    public void TakeDamage(bool damage, int attack){
+        if(damage)
+            Damage(attack);
     }
 
     public void Damage(int attack)
@@ -164,4 +162,7 @@ public class Zombie : IBody
             return true;
         return false;
     }
+    
+    public bool intersectShot(Rectangle bullet)
+    => this.zombie.IntersectsWith(bullet);
 }

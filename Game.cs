@@ -1,5 +1,5 @@
 #pragma warning disable
-
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -7,8 +7,11 @@ using System.Collections.Generic;
 
 public class Game
 {
-    private Rectangle bullet;
+    private Random number = new Random();
+    private int brain = 0;
 
+
+    private Rectangle bullet;
     private List<IBody> bodys;
     private List<Zombie> zombies;
     private List<Human> humans;
@@ -53,7 +56,7 @@ public class Game
 
         zombieMain = new ZombieMain(Joe);
         human = new Human(form);
-        police = new Police(form);
+        police = new Police(form, pistols);
         zombie = new Zombie(human.x, human.y);
         // wall = new Wall(50,50,30,100);
 
@@ -75,7 +78,7 @@ public class Game
             {
 
                 GraphicsUnit units = GraphicsUnit.Pixel;
-                g.DrawString("Brains: " + zombies.Count.ToString(), new Font("arial", 20), Brushes.Black, 0, 0);
+                g.DrawString("Brains: " + brain.ToString(), new Font("arial", 20), Brushes.Black, 0, 50);
                 zombieMain.draw(g);
                 zombieMain.Update();
 
@@ -121,13 +124,14 @@ public class Game
                 }
 
 
-                foreach (var z in zombies)
+
+                for (int j = 0; j < zombies.Count; j++)
                 {
-                    z.Draw(g, new SolidBrush(Color.Green));
+                    zombies[j].Draw(g, new SolidBrush(Color.Green));
 
                     for (int i = 0; i < humans.Count; i++)
                     {
-                        humans[i].TakeDamage(z.intersect(humans[i]), z.attackdamage);
+                        humans[i].TakeDamage(zombies[j].intersect(humans[i]), zombies[j].attackdamage);
 
                         if (humans[i].life <= 0)
                         {
@@ -137,22 +141,27 @@ public class Game
                             break;
                         }
                     }
-
-                    foreach (var p in pistols)
-                    {
-                        if (p.hitZombie(z))
-                        {
-                            z.Damage(p.damage);
-                            if (z.life >= 0)
-                                zombies.Remove(z);
-                        }
-                    }
-
                     if (killed)
                         break;
                 }
+
                 killed = false;
 
+                foreach (var p in pistols)
+                {
+                    for (int d = 0; d < zombies.Count; d++)
+                    {
+                        zombies[d].TakeDamage(zombies[d].intersectShot(p.bullet), p.damage);
+                        if (zombies[d].life <= 0)
+                        {
+                            zombies.Remove(zombies[d]);
+                            d -= 1;
+                            break;
+                        }
+                    }
+
+                    zombieMain.TakeDamage(zombieMain.intersectShot(p.bullet),p.damage);
+                }
 
 
 
@@ -196,10 +205,21 @@ public class Game
 
     public void newZombie(Human human)
     {
-        var zombie = new Zombie(human.x, human.y);
-        humans.Remove(human);
-        zombies.Add(zombie);
-        bodys.Add(zombie);
+        var pct = number.Next(zombieMain.chance, 20);
+
+        if (pct == pct)
+        {
+            var zombie = new Zombie(human.x, human.y);
+            humans.Remove(human);
+            zombies.Add(zombie);
+            bodys.Add(zombie);
+            brain += 1;
+        }
+        else
+        {
+            humans.Remove(human);
+            brain += 1;
+        }
     }
 
 
@@ -214,9 +234,11 @@ public class Game
 
         for (int p = 0; p < qttPolices; p++)
         {
-            police = new Police(form);
+            police = new Police(form, pistols);
             polices.Add(police);
         }
 
     }
+
+
 }

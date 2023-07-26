@@ -8,8 +8,7 @@ public class Pistol : IGun
     Rectangle zombieRec;
     private Police police;
     Rectangle pistol;
-    Rectangle bullet;
-    Graphics g = null;
+    public Rectangle bullet;
     double VeloBullet = 15;
     int width = 10;
     int height = 10;
@@ -45,12 +44,6 @@ public class Pistol : IGun
         BulletY -= (int)((direcaoY) / pita * VeloBullet);
 
         bullet.Location = new Point(BulletX, BulletY);
-    }
-
-    public bool hitZombie(Zombie zombie)
-    {
-        zombieRec = new Rectangle(zombie.x, zombie.y, zombie.Width, zombie.Height);
-        return bullet.IntersectsWith(zombieRec);
     }
 
 
