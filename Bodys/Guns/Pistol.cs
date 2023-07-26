@@ -7,9 +7,10 @@ public class Pistol : IGun
 {
     Rectangle zombieRec;
     private Police police;
+    private ZombieMain zombieMain;
     Rectangle pistol;
     public Rectangle bullet;
-    double VeloBullet = 15;
+    double VeloBullet = 5;
     int width = 10;
     int height = 10;
     int x => police.police.Location.X;
@@ -20,7 +21,7 @@ public class Pistol : IGun
     {
         this.police = police;
         pistol = new Rectangle(x, y, width, height);
-        bullet = new Rectangle(x, y, width, height);
+        bullet = new Rectangle(x, y, 7, 7);
     }
 
     public void Draw(Graphics g, SolidBrush color, SolidBrush colorBullet)
@@ -44,6 +45,7 @@ public class Pistol : IGun
         BulletY -= (int)((direcaoY) / pita * VeloBullet);
 
         bullet.Location = new Point(BulletX, BulletY);
+
     }
 
 
@@ -61,10 +63,7 @@ public class Pistol : IGun
 
     public void Reload(Form form)
     {
-        if (bullet.Location.X <= form.Width || bullet.Location.Y <= form.Height)
-        {
-            bullet.Location = new Point(x, y);
-        }
+        bullet.Location = new Point(x, y);
     }
 
     public void Update(int x, int y)

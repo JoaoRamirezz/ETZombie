@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
-
 public class Game
 {
     private Random number = new Random();
@@ -18,13 +17,15 @@ public class Game
     private List<Police> polices;
     private List<Pistol> pistols;
 
-
     private ZombieMain zombieMain;
     private Human human;
     private Police police;
     private Zombie zombie;
     private Wall wall;
-
+    int MoreLifePrice;
+    int MoreDamagePrice;
+    int MoreMovePrice;
+    public string name = "";
 
     public void go()
     {
@@ -35,8 +36,6 @@ public class Game
         pistols = new List<Pistol>();
 
         bool running = true;
-
-        ApplicationConfiguration.Initialize();
 
 
         Graphics g = null;
@@ -115,18 +114,22 @@ public class Game
                     }
                 }
 
-
-                foreach (var p in polices)
+                for (int p = 0; p < polices.Count; p++)
                 {
-                    p.Draw(g, new SolidBrush(Color.Blue));
-                    p.ToSearchFor(zombieMain, form, zombies);
-                    p.Update();
+
+                    polices[p].Draw(g, new SolidBrush(Color.Blue));
+                    polices[p].ToSearchFor(zombieMain, form, zombies);
+                    polices[p].Update();
+                    polices[p].TakeDamage(zombieMain.intersectPolice(polices[p]), zombieMain.attackDamage);
+
+                    if (polices[p].life <= 0)
+                    {
+                        polices.Remove(polices[p]);
+                        p -= 1;
+                    }
                 }
 
-
-
-                for (int j = 0; j < zombies.Count; j++)
-                {
+                for (int j = 0; j < zombies.Count; j++){
                     zombies[j].Draw(g, new SolidBrush(Color.Green));
 
                     for (int i = 0; i < humans.Count; i++)
@@ -141,11 +144,22 @@ public class Game
                             break;
                         }
                     }
+
+                    for (int p = 0; p < polices.Count; p++)
+                    {
+                        polices[p].TakeDamage(zombies[j].intersectPolice(polices[p]), zombies[j].attackdamage);
+
+                        if (polices[p].life <= 0)
+                        {
+                            polices.Remove(polices[p]);
+                            p -= 1;
+                            break;
+                        }
+                    }
+
                     if (killed)
                         break;
                 }
-
-                killed = false;
 
                 foreach (var p in pistols)
                 {
@@ -160,10 +174,10 @@ public class Game
                         }
                     }
 
-                    zombieMain.TakeDamage(zombieMain.intersectShot(p.bullet),p.damage);
+                    zombieMain.TakeDamage(zombieMain.intersectShot(p.bullet), p.damage);
                 }
 
-
+                killed = false;
 
                 zombie.DrunkZombie(zombies, zombieMain.x, zombieMain.y);
 
@@ -197,11 +211,8 @@ public class Game
         };
 
         form.KeyPreview = true;
-        Application.Run(form);
+        form.Show();
     }
-
-
-
 
     public void newZombie(Human human)
     {
@@ -222,7 +233,6 @@ public class Game
         }
     }
 
-
     public void generateBots(int qttHumans, int qttPolices, Form form)
     {
         for (int i = 0; i < qttHumans; i++)
@@ -240,5 +250,29 @@ public class Game
 
     }
 
+    public int MoreLife()
+    {
+        name = "Life";
+
+        zombieMain.life += 5;
+        MoreLifePrice += 10;
+
+        return MoreLifePrice;
+    }
+
+    public void MoreDamage()
+    {
+        name = "Damage";
+        zombieMain.attackDamage += 5;
+        MoreDamagePrice += 10;
+    }
+
+    public void MoreMovespeed()
+    {
+        name = "Speed";
+
+        zombieMain.movespeed += 55;
+        MoreMovePrice += 10;
+    }
 
 }

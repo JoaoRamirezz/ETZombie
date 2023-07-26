@@ -1,6 +1,9 @@
 using System.Media;
-var game = new Game();
 
+
+ApplicationConfiguration.Initialize();
+
+var start = new Start();
 SoundPlayer simpleSound = new SoundPlayer("Sounds/Soundtrack.wav");
 simpleSound.Play();
-game.go();
+start.go();
