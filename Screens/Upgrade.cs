@@ -11,7 +11,6 @@ public class Upgrade
         var form = new Form();
 
         Game game = new Game();
-        Random random = new Random();
         Button upgrade_card = new Button();
 
         form.WindowState = FormWindowState.Maximized;

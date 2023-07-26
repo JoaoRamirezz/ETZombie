@@ -11,6 +11,7 @@ public class ZombieMain : IBody
 
     Image zombieImg;
     int distanceImg = 3;
+    public int MaxLife = 200;
     public int life = 200;
     public int movespeed = 2;
     public int attackDamage = 1;

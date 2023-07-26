@@ -6,6 +6,7 @@ public class Start
 {
     public void go()
     {
+        Game game = new Game();
         Upgrade upgrade = new Upgrade();
         var form = new Form();
 
@@ -13,9 +14,6 @@ public class Start
         form.FormBorderStyle = FormBorderStyle.Fixed3D;
 
         form.BackgroundImage = Image.FromFile("Screens/images/bg.png");
-
-        int size = 25; 
-
 
         Button play = new Button();
         play.Text = "PLAY";
@@ -34,7 +32,7 @@ public class Start
 
         play.MouseDown += (s, e) =>
         {
-            upgrade.go();
+            game.go();
             form.Hide();
         };
 

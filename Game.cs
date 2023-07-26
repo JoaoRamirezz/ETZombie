@@ -6,9 +6,10 @@ using System.Collections.Generic;
 
 public class Game
 {
+    Upgrade upgrade = new Upgrade();
+
     private Random number = new Random();
     private int brain = 0;
-
 
     private Rectangle bullet;
     private List<IBody> bodys;
@@ -27,6 +28,8 @@ public class Game
     int MoreMovePrice;
     public string name = "";
 
+    bool flag = true;
+
     public void go()
     {
         bodys = new List<IBody>();
@@ -37,12 +40,10 @@ public class Game
 
         bool running = true;
 
-
         Graphics g = null;
         Bitmap bmp = null;
         Image Joe = Image.FromFile("imagens/JoeSprites.png");
         Rectangle ImgRec = new Rectangle(0, 0, 120, 120);
-
 
         var form = new Form();
         form.WindowState = FormWindowState.Maximized;
@@ -59,22 +60,23 @@ public class Game
         zombie = new Zombie(human.x, human.y);
         // wall = new Wall(50,50,30,100);
 
-
         var killed = false;
-
 
         generateBots(100, 10, form);
 
-
         var timer = new Timer();
         timer.Interval = 30;
-
-
 
         Application.Idle += delegate
         {
             while (running)
             {
+                if (zombieMain.life <= 0)
+                {
+                    break; 
+                }
+
+
                 GraphicsUnit units = GraphicsUnit.Pixel;
                 g.DrawString("Brains: " + brain.ToString(), new Font("arial", 20), Brushes.Black, 0, 50);
                 zombieMain.draw(g);
@@ -157,7 +159,7 @@ public class Game
                         }
                     }
 
-                    zombieMain.TakeDamage(zombieMain.intersectShot(p.bullet),p.damage);
+                    zombieMain.TakeDamage(zombieMain.intersectShot(p.bullet), p.damage);
                 }
 
 
@@ -168,7 +170,16 @@ public class Game
                 g.Clear(Color.Transparent);
                 Application.DoEvents();
             }
+
+            while (flag)
+            {
+                upgrade.go();
+                flag = false;
+
+            }
         };
+
+        upgrade.go();
 
         form.KeyDown += (s, e) =>
         {
