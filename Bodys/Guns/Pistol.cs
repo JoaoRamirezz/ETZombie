@@ -10,13 +10,12 @@ public class Pistol : IGun
     private ZombieMain zombieMain;
     Rectangle pistol;
     public Rectangle bullet;
-    Graphics g = null;
     double VeloBullet = 15;
     int width = 10;
     int height = 10;
     int x => police.police.Location.X;
     int y => police.police.Location.Y;
-    int damage = 15;
+    public int damage = 15;
 
     public Pistol(Form form, Police police)
     {
@@ -49,28 +48,18 @@ public class Pistol : IGun
 
     }
 
-    public void hit(List<Zombie> zombies, ZombieMain Joe)
+
+
+    public bool hitJoe(ZombieMain Joe)
     {
-        foreach (var z in zombies)
-        {
-            zombieRec = new Rectangle(z.x, z.y, z.Width, z.Height);
-            if (bullet.IntersectsWith(zombieRec))
-            {
-                z.life -= damage;
-                if (z.life <= 0)
-                    zombies.Remove(z);
-                return;
-            }
-        }
-
-
         zombieRec = new Rectangle(Joe.x, Joe.y, Joe.Width, Joe.Height);
-        if (bullet.IntersectsWith(zombieRec))
-        {
-            Joe.life -= damage;
-            return;
-        }
+        if (!bullet.IntersectsWith(zombieRec))
+            return false;
+        
+        Joe.life -= damage;
+        return true;
     }
+
 
     public void Reload(Form form)
     {

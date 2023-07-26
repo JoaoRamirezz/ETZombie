@@ -20,10 +20,9 @@ public class Police : IBody
     double direcaoY;
     int MovieSpeed = 1;
     Pistol pistol;
-    Graphics g = null;
     bool flag = false;
 
-    public Police(Form form)
+    public Police(Form form, List<Pistol> pistols)
     {
         police = new Rectangle(
             numberRandom.Next(0, 1200),
@@ -35,6 +34,7 @@ public class Police : IBody
         backbar = new Rectangle(police.Location.X, police.Location.Y - 10, width, 5);
         bar = new Rectangle(police.Location.X, police.Location.Y - 10, width, 5);
         pistol = new Pistol(form, this);
+        pistols.Add(pistol);
 
     }
 
