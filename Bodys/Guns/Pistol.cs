@@ -9,7 +9,7 @@ public class Pistol : IGun
     private Police police;
     private ZombieMain zombieMain;
     Rectangle pistol;
-    Rectangle bullet;
+    public Rectangle bullet;
     Graphics g = null;
     double VeloBullet = 15;
     int width = 10;
@@ -46,6 +46,7 @@ public class Pistol : IGun
         BulletY -= (int)((direcaoY) / pita * VeloBullet);
 
         bullet.Location = new Point(BulletX, BulletY);
+
     }
 
     public void hit(List<Zombie> zombies, ZombieMain Joe)

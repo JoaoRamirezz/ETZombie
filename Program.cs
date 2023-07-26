@@ -1,2 +1,4 @@
-var game = new Game();
-game.go();
+ApplicationConfiguration.Initialize();
+
+var start = new Start();
+start.go();

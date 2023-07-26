@@ -12,19 +12,18 @@ public class Game
     private List<Police> polices;
     private List<Pistol> pistols;
 
-
     private ZombieMain zombieMain;
     private Human human;
     private Police police;
     private Zombie zombie;
     private Wall wall;
-
+    int MoreLifePrice;
+    int MoreDamagePrice;
+    int MoreMovePrice;
+    public string name = "";
 
     public void go()
     {
-        Start start = new Start();
-        start.go();
-
         bodys = new List<IBody>();
         zombies = new List<Zombie>();
         humans = new List<Human>();
@@ -32,8 +31,6 @@ public class Game
         pistols = new List<Pistol>();
 
         bool running = true;
-
-        ApplicationConfiguration.Initialize();
 
 
         Graphics g = null;
@@ -74,7 +71,6 @@ public class Game
         {
             while (running)
             {
-
                 GraphicsUnit units = GraphicsUnit.Pixel;
                 g.DrawString("Brains: " + brains.ToString(), new Font("arial", 10), Brushes.Black, 0, 0);
                 zombieMain.draw(g);
@@ -138,9 +134,8 @@ public class Game
 
                 foreach (var p in pistols)
                 {
-                    p.hit(zombies, zombieMain);    
+                    p.hit(zombies, zombieMain);  
                 }
-
 
                 foreach (var p in polices)
                 {
@@ -181,11 +176,8 @@ public class Game
         };
 
         form.KeyPreview = true;
-        Application.Run(form);
+        form.Show();
     }
-
-
-
 
     public void newZombie(Human human)
     {
@@ -194,7 +186,6 @@ public class Game
         zombies.Add(zombie);
         bodys.Add(zombie);
     }
-
 
     public void generateBots(int qttHumans, int qttPolices, Form form)
     {
@@ -212,4 +203,30 @@ public class Game
         }
 
     }
+
+    public int MoreLife()
+    {
+        name = "Life";
+
+        zombieMain.life += 5;
+        MoreLifePrice += 10;
+
+        return MoreLifePrice;
+    }
+
+    public void MoreDamage()
+    {
+        name = "Damage";
+        zombieMain.attackDamage += 5;
+        MoreDamagePrice += 10;
+    }
+
+    public void MoreMovespeed()
+    {
+        name = "Speed";
+
+        zombieMain.movespeed += 55;
+        MoreMovePrice += 10;
+    }
+
 }
