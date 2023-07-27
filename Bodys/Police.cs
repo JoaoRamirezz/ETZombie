@@ -9,15 +9,10 @@ public class Police : IBody
     private DateTime lastFrame = DateTime.Now;
     Rectangle bar;
     Rectangle backbar;
-    Bullet bullet;
     public int x;
     public int y;
     public int width = 20;
     public int height = 20;
-    double velX = 0;
-    double velY = 0;
-    double FiX;
-    double FiY;
     double d;
     double range;
     int pointOfView = 200;
@@ -25,8 +20,7 @@ public class Police : IBody
     double direcaoY;
     int MovieSpeed = 1;
     Pistol pistol;
-    Graphics g = null;
-    private DateTime lastFramePolice = DateTime.Now;
+    // Bullet bullet;
 
     public Police(Form form)
     {
@@ -40,7 +34,6 @@ public class Police : IBody
         backbar = new Rectangle(police.Location.X, police.Location.Y - 10, width, 5);
         bar = new Rectangle(police.Location.X, police.Location.Y - 10, width, 5);
         pistol = new Pistol(form, this);
-
     }
 
 
@@ -75,12 +68,7 @@ public class Police : IBody
 
         if (range <= pointOfView)
         {
-            // var FrameCurrent = DateTime.Now - lastFramePolice;
-            // lastFramePolice = DateTime.Now;
-            // var time = FrameCurrent.TotalSeconds;
-
-            // if(time >= 10)
-                pistol.Shot(zombieX, zombieY);
+            pistol.Shot(zombieX, zombieY);
 
             direcaoX = -(x - zombieX);
             direcaoY = -(y - zombieY);

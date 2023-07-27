@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 public interface IBullet
 {
-    void Draw(Graphics g);
+    void Draw(Graphics g, SolidBrush color);
     void Update(int x, int y); 
 }
 

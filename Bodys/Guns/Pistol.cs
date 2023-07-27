@@ -7,8 +7,8 @@ public class Pistol : IGun
 {
     private Police police;
     Rectangle pistol;
-    Bullet bullet;
-    Graphics g = null;
+    Rectangle bullet;
+    Graphics g;
     double VeloBullet = 15;
     int width = 10;
     int height = 10;
@@ -19,7 +19,7 @@ public class Pistol : IGun
     {
         this.police = police;
         pistol = new Rectangle(x, y, width, height);
-        bullet = new Bullet(form, police);
+        bullet = new Rectangle(x, y, width, height);
     }
 
     public void Draw(Graphics g, SolidBrush color)
@@ -27,23 +27,22 @@ public class Pistol : IGun
         g.FillRectangle(color, this.pistol);
     }
 
-
     public void Shot(int zombieLiderX, int zombieLiderY)
-    {
-        bullet.Draw(g);
+    { 
+        // bullet.Draw(g, new SolidBrush(Color.Black));
 
-        var BulletX = bullet.bulletX;
-        var BulletY = bullet.bulletY;
+        var BulletX = bullet.Location.X;
+        var BulletY = bullet.Location.Y;
 
         var direcaoX = (x - zombieLiderX);
         var direcaoY = (y - zombieLiderY);
 
         var pita = Math.Sqrt(direcaoX * direcaoX + direcaoY * direcaoY);
-   
-        BulletX -= (int)((direcaoX) / pita * VeloBullet);   
-        BulletY -= (int)((direcaoY) / pita * VeloBullet); 
-              
-        bullet.Update(BulletX, BulletY);
+
+        BulletX -= (int)((direcaoX) / pita);
+        BulletY -= (int)((direcaoY) / pita);
+
+        bullet.Location = new Point(BulletX, BulletY);
     }
 
     public void Inactive()
@@ -51,7 +50,7 @@ public class Pistol : IGun
         var BulletX = pistol.Location.X;
         var BulletY = pistol.Location.Y;
 
-        bullet.Update(BulletX, BulletY);
+        // bullet.Update(BulletX, BulletY);
     }
 
     public void Reload()
@@ -59,11 +58,11 @@ public class Pistol : IGun
 
     }
 
-    public void Update(Police police)
-    {
-        police = this.police;
-        pistol.Location = new Point(x, y);
-    }
+    // public void Update(Police police)
+    // {
+    //     police = this.police;
+    //     pistol.Location = new Point(x, y);
+    // }
 
     public void Update(int x, int y)
     {
