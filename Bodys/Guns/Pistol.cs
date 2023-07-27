@@ -45,7 +45,6 @@ public class Pistol : IGun
         BulletY -= (int)((direcaoY) / pita * VeloBullet);
 
         bullet.Location = new Point(BulletX, BulletY);
-
     }
 
 

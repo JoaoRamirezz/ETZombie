@@ -20,6 +20,7 @@ public class Zombie : IBody
     double FiY;
     public int life = 50;
     public int maxlife = 0;
+    int speed = 10000;
 
     public Zombie(int x, int y)
     {
@@ -38,9 +39,6 @@ public class Zombie : IBody
 
     public void Draw(Graphics g, SolidBrush color)
     {
-        // if (this.zombie.Location.X < -5000 || this.zombie.Location.Y > 5000)
-        //     return;
-
         g.FillRectangle(color, this.zombie);
         g.FillRectangle(new SolidBrush(Color.Black), backbar);
         g.FillRectangle(new SolidBrush(Color.Red), bar);
@@ -127,7 +125,6 @@ public class Zombie : IBody
             zombieList[i].velX += FiX * time;
             zombieList[i].velY += FiY * time;
 
-            int speed = 500;
             if (zombieList[i].velX > speed)
                 zombieList[i].velX = speed;
             else if (zombieList[i].velX < -speed)

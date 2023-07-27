@@ -1,7 +1,8 @@
+using System;
+using System.Media;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using System;
 
 public class Upgrade
 {
@@ -11,6 +12,9 @@ public class Upgrade
     List<object> methods = new List<object>();
     public void go(ZombieMain zombie)
     {
+        SoundPlayer soundElevator = new SoundPlayer("Sounds/shop.wav");
+        soundElevator.Play();
+
         var form = new Form();
         zombie.life = zombie.maxlife;
 
@@ -22,13 +26,12 @@ public class Upgrade
 
         form.WindowState = FormWindowState.Maximized;
         form.FormBorderStyle = FormBorderStyle.Fixed3D;
-        form.BackgroundImage = Image.FromFile("Screens/images/bg.png");
+        form.BackgroundImage = Image.FromFile("Screens/images/bgUpgrade-fotor.png");
+        form.BackgroundImageLayout = ImageLayout.Stretch;
         newzombie.maxlife = zombie.maxlife;
         var methodInt1 = random.Next(0, 3);
         var methodInt2 = random.Next(0, 3);
         var methodInt3 = random.Next(0, 3);
-
-
 
         Button upgrade_card1 = new Button();
         upgrade_card1.Text = selectName(methodInt1, upgrade);

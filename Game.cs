@@ -19,7 +19,6 @@ public class Game
     private List<Police> polices;
     private List<Pistol> pistols;
 
-
     private Human human;
     private Police police;
     private Zombie zombie;
@@ -51,6 +50,7 @@ public class Game
         var form = new Form();
         form.WindowState = FormWindowState.Maximized;
         form.FormBorderStyle = FormBorderStyle.None;
+        form.BackgroundImage = Image.FromFile("Screens/images/map.png");
 
         PictureBox pb = new PictureBox();
         pb.Dock = DockStyle.Fill;
@@ -170,6 +170,11 @@ public class Game
                     for (int d = 0; d < zombies.Count; d++)
                     {
                         zombies[d].TakeDamage(zombies[d].intersectShot(p.bullet), p.damage);
+                        if (zombies[d].intersectShot(p.bullet))
+                        {
+                            p.bullet.Location = new Point(0,0);
+                        }   
+
                         if (zombies[d].life <= 0)
                         {
                             zombies.Remove(zombies[d]);

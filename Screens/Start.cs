@@ -18,12 +18,19 @@ public class Start
         Image JoeImg = Image.FromFile("imagens/JoeSprites.png");
         Joe = new ZombieMain();
 
+        form.TransparencyKey = Color.AliceBlue;
+
         Button play = new Button();
-        play.Text = "PLAY";
-        play.Name = "play";
-        play.Width = 320;
-        play.Height = 130;
-        play.Location = new Point(800, 450);
+        play.BackgroundImage = Image.FromFile("Screens/images/ZombiePlay.png");
+        play.BackgroundImageLayout = ImageLayout.Center;
+        play.FlatStyle = FlatStyle.Flat;
+        play.BackColor = Color.Transparent;
+        play.FlatAppearance.MouseDownBackColor = Color.Transparent;
+        play.FlatAppearance.MouseOverBackColor = Color.Transparent;
+        play.FlatAppearance.BorderSize = 0;
+        play.Width = 390;
+        play.Height = 390;
+        play.Location = new Point(740, 350);
         form.Controls.Add(play);
 
         // Button settings = new Button();
