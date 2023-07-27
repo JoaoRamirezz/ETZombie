@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 public class Game
 {
+
     Upgrade upgrade = new Upgrade();
 
     private Random number = new Random();
@@ -18,7 +19,7 @@ public class Game
     private List<Police> polices;
     private List<Pistol> pistols;
 
-    private ZombieMain zombieMain;
+
     private Human human;
     private Police police;
     private Zombie zombie;
@@ -27,11 +28,14 @@ public class Game
     int MoreDamagePrice;
     int MoreMovePrice;
     public string name = "";
-
+    int pct;
+    bool dead = false;
     bool flag = true;
 
-    public void go()
+    public void go(Image JoeImg, ZombieMain zombieMain)
     {
+        pct = number.Next(zombieMain.chance, 20);
+
         bodys = new List<IBody>();
         zombies = new List<Zombie>();
         humans = new List<Human>();
@@ -42,7 +46,6 @@ public class Game
 
         Graphics g = null;
         Bitmap bmp = null;
-        Image Joe = Image.FromFile("imagens/JoeSprites.png");
         Rectangle ImgRec = new Rectangle(0, 0, 120, 120);
 
         var form = new Form();
@@ -52,9 +55,10 @@ public class Game
         PictureBox pb = new PictureBox();
         pb.Dock = DockStyle.Fill;
         form.Controls.Add(pb);
+        zombieMain.putImage(JoeImg);
 
+        var zombieFlag = zombieMain;
 
-        zombieMain = new ZombieMain(Joe);
         human = new Human(form);
         police = new Police(form, pistols);
         zombie = new Zombie(human.x, human.y);
@@ -71,17 +75,13 @@ public class Game
         {
             while (running)
             {
-<<<<<<< HEAD
-=======
                 if (zombieMain.life <= 0)
-                {
                     break; 
-                }
 
->>>>>>> 16d49feedb4892925be910d3a5a7f93462d77aea
 
                 GraphicsUnit units = GraphicsUnit.Pixel;
                 g.DrawString("Brains: " + brain.ToString(), new Font("arial", 20), Brushes.Black, 0, 50);
+                g.DrawString(zombieMain.maxlife.ToString(), new Font("arial", 10), Brushes.Black, 210, 0);
                 zombieMain.draw(g);
                 zombieMain.Update();
 
@@ -179,7 +179,15 @@ public class Game
                     }
 
                     zombieMain.TakeDamage(zombieMain.intersectShot(p.bullet), p.damage);
+                    if (zombieMain.life <= 0)
+                    {
+                        dead = true;
+                        break; 
+                    }
                 }
+                if(dead)
+                    break;
+
 
                 killed = false;
 
@@ -192,13 +200,11 @@ public class Game
 
             while (flag)
             {
-                upgrade.go();
+                upgrade.go(zombieFlag);
+                form.Hide();
                 flag = false;
-
             }
         };
-
-        upgrade.go();
 
         form.KeyDown += (s, e) =>
         {
@@ -229,8 +235,6 @@ public class Game
 
     public void newZombie(Human human)
     {
-        var pct = number.Next(zombieMain.chance, 20);
-
         if (pct == pct)
         {
             var zombie = new Zombie(human.x, human.y);
@@ -261,31 +265,6 @@ public class Game
             polices.Add(police);
         }
 
-    }
-
-    public int MoreLife()
-    {
-        name = "Life";
-
-        zombieMain.life += 5;
-        MoreLifePrice += 10;
-
-        return MoreLifePrice;
-    }
-
-    public void MoreDamage()
-    {
-        name = "Damage";
-        zombieMain.attackDamage += 5;
-        MoreDamagePrice += 10;
-    }
-
-    public void MoreMovespeed()
-    {
-        name = "Speed";
-
-        zombieMain.movespeed += 55;
-        MoreMovePrice += 10;
     }
 
 }

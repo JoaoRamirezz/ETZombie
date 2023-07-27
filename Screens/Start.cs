@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class Start
 {
+    ZombieMain Joe;
     public void go()
     {
         Game game = new Game();
@@ -12,8 +13,10 @@ public class Start
 
         form.WindowState = FormWindowState.Maximized;
         form.FormBorderStyle = FormBorderStyle.Fixed3D;
-
         form.BackgroundImage = Image.FromFile("Screens/images/bg.png");
+
+        Image JoeImg = Image.FromFile("imagens/JoeSprites.png");
+        Joe = new ZombieMain();
 
         Button play = new Button();
         play.Text = "PLAY";
@@ -32,7 +35,7 @@ public class Start
 
         play.MouseDown += (s, e) =>
         {
-            game.go();
+            game.go(JoeImg, Joe);
             form.Hide();
         };
 

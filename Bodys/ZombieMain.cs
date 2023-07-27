@@ -11,7 +11,6 @@ public class ZombieMain : IBody
 
     Image zombieImg;
     int distanceImg = 3;
-    public int MaxLife = 200;
     public int life = 200;
     public int movespeed = 2;
     public int attackDamage = 1;
@@ -27,17 +26,19 @@ public class ZombieMain : IBody
     public int SideY;
     bool run = false;
     public int chance = 1;
-    int maxlife = 0;
+    public int maxlife = 0;
     int barSize = 200;
 
-    public ZombieMain(Image img)
+    public ZombieMain()
     {
         zombie = new Rectangle(50, 50, 25, 25);
-        zombieImg = img;
         maxlife = life;
         backbar = new Rectangle(0, 10, barSize, 20);
         bar = new Rectangle(0, 10, barSize, 20);
     }
+
+    public void putImage(Image img)
+    => zombieImg = img;
 
     public void go(KeyEventArgs e, Wall wall)
     {
