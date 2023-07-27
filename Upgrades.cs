@@ -13,7 +13,7 @@ public class Upgrades
     public void MoreLife(ZombieMain zombie)
         => zombie.maxlife += 10;
     public string MoreLifeName()
-        => "Life Up";
+        => "Life Up ❤";
 
 
 
@@ -21,7 +21,7 @@ public class Upgrades
     public void MoreDamage(ZombieMain zombie)
         => zombie.attackDamage += 1;
     public string MoreDamageName()
-        => "Damage Up";
+        => "Damage Up 👊";
     
     
 
@@ -29,7 +29,7 @@ public class Upgrades
     public void MoreSpeed(ZombieMain zombie)
         => zombie.movespeed += 1;
     public string MoreSpeedName()
-        => "Move Speed Up";
+        => "Move Speed Up 🏃‍♂️";
 
 
 
@@ -37,21 +37,21 @@ public class Upgrades
     public void MoreChance(ZombieMain zombie)
         => zombie.chance += 1;
     public string MoreChanceName()
-        => "Chance Up";
+        => "Chance Up 🍀";
 
 
 
     public void MoreCure(ZombieMain zombie)
         => zombie.cure += 10;
     public string MoreCureName()
-        => "Cure Up";
+        => "Cure Up 💊";
 
 
 
     public void MoreZombiesLife(ZombieMain zombie)
         => zombie.zombiesLife += 10;
     public string MoreZombiesLifeName()
-        => "Zombies Life";
+        => "Zombies Life 💚";
 
 
 

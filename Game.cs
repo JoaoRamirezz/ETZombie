@@ -33,12 +33,13 @@ public class Game
     int pct;
     bool dead = false;
     bool flag = true;
+    int spawmPolices = 3;
+    int spawnHumans = 80;
+    int spawmPoison = 5;
 
     public void go(Image JoeImg, ZombieMain zombieMain, SoundPlayer music)
     {
         music.PlayLooping();
-        pct = number.Next(zombieMain.chance, 20);
-
         zombiesImg = new List<Image>();
         humansImg = new List<Image>();
         policesImg = new List<Image>();
@@ -81,7 +82,7 @@ public class Game
 
         var killed = false;
 
-        generateBots(100, 10, 8, form);
+        generateBots(spawnHumans, spawmPolices, spawmPoison, form);
 
         var timer = new Timer();
         timer.Interval = 30;
@@ -97,35 +98,23 @@ public class Game
 
 
                 GraphicsUnit units = GraphicsUnit.Pixel;
-                g.DrawString("Brains: " + brain.ToString(), new Font("arial", 15), Brushes.Black, 0, 40);
-                g.DrawString("Horde: " + zombies.Count.ToString(), new Font("arial", 15), Brushes.Black, 0, 70);
+                g.DrawString("Brains:" + brain.ToString(), new Font("arial", 15), Brushes.Black, 0, 40);
+                g.DrawString("Horde:" + zombies.Count.ToString(), new Font("arial", 15), Brushes.Black, 0, 65);
+
+
+                g.DrawString("Damage: " + zombieMain.attackDamage.ToString(), new Font("arial", 13), Brushes.Black, 0, 112);
+                g.DrawString("Speed: " + zombieMain.movespeed.ToString(), new Font("arial", 13), Brushes.Black, 0, 132);
+                g.DrawString("Chance: " + zombieMain.chance.ToString(), new Font("arial", 13), Brushes.Black, 0, 152);
+                g.DrawString("Cure: " + zombieMain.cure.ToString(), new Font("arial", 13), Brushes.Black, 0, 172);
+                
                 g.DrawString(zombieMain.life.ToString(), new Font("arial", 10), Brushes.Black, 210, 0);
                 zombieMain.draw(g);
                 zombieMain.Update();
 
-                // if(zombieMain.CollideWallX(wall))
-                // {
-                //     if(zombieMain.x > wall.X)
-                //         zombieMain.x = wall.X + wall.Width;
-                //     else
-                //         zombieMain.x = wall.X - zombieMain.Height;
-                // }
-
-                // if(zombieMain.CollideWallY(wall))
-                // {
-                //     if(zombieMain.y < wall.Y)
-                //         zombieMain.y = wall.Y - zombieMain.Height;
-                //     else
-                //         zombieMain.y = wall.Y + wall.Height;
-                // }
-
-
-                // wall.Draw(g, new SolidBrush(Color.Orange));
-
                 for (int b = 0; b < brainsPoison.Count; b++)
                 {
                     brainsPoison[b].Draw(g, new SolidBrush(Color.Purple));
-                    if(zombieMain.takePoison(brainsPoison[b]))
+                    if (zombieMain.takePoison(brainsPoison[b]))
                     {
                         zombieMain.life += zombieMain.cure;
                         brainsPoison.Remove(brainsPoison[b]);
@@ -227,7 +216,16 @@ public class Game
 
                 killed = false;
 
+                if(polices.Count <= 0 || humans.Count <= 0)
+                {
+                    generateBots(spawnHumans, spawmPolices, spawmPoison, form);
+                    spawnHumans += 20;
+                    spawmPolices += 3;
+                    spawmPoison += 1;
+                }
+
                 zombie.DrunkZombie(zombies, zombieMain.x, zombieMain.y);
+
 
                 pb.Refresh();
                 g.Clear(Color.Transparent);
@@ -273,8 +271,9 @@ public class Game
 
     public void newZombie(Human human, ZombieMain zombieMain)
     {
+        pct = number.Next(zombieMain.chance, 21);
         var index = number.Next(0, zombiesImg.Count);
-        if (pct == pct)
+        if (pct == 20)
         {
             var zombie = new Zombie(human.x, human.y);
             zombie.life = zombieMain.zombiesLife;
