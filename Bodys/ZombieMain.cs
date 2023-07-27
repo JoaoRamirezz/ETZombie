@@ -11,11 +11,18 @@ public class ZombieMain : IBody
     Rectangle mask;
     Image zombieImg;
 
-    
+    public int cure = 40;
+    public int zombiesLife = 10;
+
+
     public int LifePrice = 10;
     public int DamagePrice = 10;
     public int SpeedPrice = 10;
+    public int ChancePrice = 10;
+    public int CurePrice = 10;
+    public int ZombiesLifePrice = 10;
     
+
     public int maxbrains = 0;
     int distanceImg = 3;
     public int life = 200;
@@ -145,12 +152,16 @@ public class ZombieMain : IBody
     public bool intersectShot(Rectangle bullet)
     => this.zombie.IntersectsWith(bullet);
 
+    public bool takePoison(BrainPoison poison)
+    {
+        Rectangle Rect = new Rectangle(poison.x, poison.y, poison.width, poison.height);
+        return this.zombie.IntersectsWith(Rect);
+    }
+
     public bool intersectPolice(Police police)
     {
         Rectangle Rect = new Rectangle(police.x, police.y, police.width, police.height);
-        if (this.zombie.IntersectsWith(Rect))
-            return true;
-        return false;
+        return this.zombie.IntersectsWith(Rect);
     }
     
     public bool intersect(Human human)

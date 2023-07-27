@@ -23,8 +23,9 @@ public class Game
     private List<Human> humans;
     private List<Police> polices;
     private List<Pistol> pistols;
+    private List<BrainPoison> brainsPoison;
 
-
+    private BrainPoison brainpoison;
     private Human human;
     private Police police;
     private Zombie zombie;
@@ -51,6 +52,7 @@ public class Game
         humans = new List<Human>();
         polices = new List<Police>();
         pistols = new List<Pistol>();
+        brainsPoison = new List<BrainPoison>();
 
         bool running = true;
 
@@ -71,6 +73,7 @@ public class Game
 
         var zombieFlag = zombieMain;
 
+        brainpoison = new BrainPoison(form);
         human = new Human(form);
         police = new Police(form, pistols);
         zombie = new Zombie(human.x, human.y);
@@ -78,7 +81,7 @@ public class Game
 
         var killed = false;
 
-        generateBots(100, 10, form);
+        generateBots(100, 10, 8, form);
 
         var timer = new Timer();
         timer.Interval = 30;
@@ -119,6 +122,18 @@ public class Game
 
                 // wall.Draw(g, new SolidBrush(Color.Orange));
 
+                for (int b = 0; b < brainsPoison.Count; b++)
+                {
+                    brainsPoison[b].Draw(g, new SolidBrush(Color.Purple));
+                    if(zombieMain.takePoison(brainsPoison[b]))
+                    {
+                        zombieMain.life += zombieMain.cure;
+                        brainsPoison.Remove(brainsPoison[b]);
+                        b -= 1;
+                        zombieMain.Update();
+                    }
+                }
+
                 for (int i = 0; i < humans.Count; i++)
                 {
                     humans[i].Draw(g, new SolidBrush(Color.Black));
@@ -128,7 +143,7 @@ public class Game
 
                     if (humans[i].life <= 0)
                     {
-                        newZombie(humans[i]);
+                        newZombie(humans[i], zombieMain);
                         i -= 1;
                     }
                 }
@@ -158,7 +173,7 @@ public class Game
 
                         if (humans[i].life <= 0)
                         {
-                            newZombie(humans[i]);
+                            newZombie(humans[i], zombieMain);
                             i -= 1;
                             killed = true;
                             break;
@@ -256,12 +271,13 @@ public class Game
         form.Show();
     }
 
-    public void newZombie(Human human)
+    public void newZombie(Human human, ZombieMain zombieMain)
     {
         var index = number.Next(0, zombiesImg.Count);
         if (pct == pct)
         {
             var zombie = new Zombie(human.x, human.y);
+            zombie.life = zombieMain.zombiesLife;
             imageZombie = zombiesImg[index];
             zombie.putImage(imageZombie);
             humans.Remove(human);
@@ -276,7 +292,7 @@ public class Game
         }
     }
 
-    public void generateBots(int qttHumans, int qttPolices, Form form)
+    public void generateBots(int qttHumans, int qttPolices, int qttBrains, Form form)
     {
         for (int i = 0; i < qttHumans; i++)
         {
@@ -291,6 +307,11 @@ public class Game
             polices.Add(police);
         }
 
+        for (int p = 0; p < qttBrains; p++)
+        {
+            brainpoison = new BrainPoison(form);
+            brainsPoison.Add(brainpoison);
+        }
     }
 
 }

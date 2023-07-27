@@ -20,7 +20,7 @@ public class Zombie : IBody
     double velY = 0;
     double FiX;
     double FiY;
-    public int life = 50;
+    public int life = 10;
     public int maxlife = 0;
     int speed = 10000;
 

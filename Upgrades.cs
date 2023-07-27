@@ -13,37 +13,51 @@ public class Upgrades
     public void MoreLife(ZombieMain zombie)
         => zombie.maxlife += 10;
     public string MoreLifeName()
-    {
-        return "Life";
-    }
-    public int MoreLifePrice(int upgrade)
-    {
-        return upgrade += 10;
-    }
+        => "Life Up";
+
 
 
 
     public void MoreDamage(ZombieMain zombie)
         => zombie.attackDamage += 1;
     public string MoreDamageName()
-    {
-        return "Damage";
-    }
-    public int MoreDamagePrice(int upgrade)
-    {
-        return upgrade += 10;
-    }
-
+        => "Damage Up";
+    
+    
 
 
     public void MoreSpeed(ZombieMain zombie)
         => zombie.movespeed += 1;
     public string MoreSpeedName()
-    {
-        return "Move Speed";
-    }
-    public int MoreSpeedPrice(int upgrade)
-    {
-        return upgrade += 10;
-    }
+        => "Move Speed Up";
+
+
+
+
+    public void MoreChance(ZombieMain zombie)
+        => zombie.chance += 1;
+    public string MoreChanceName()
+        => "Chance Up";
+
+
+
+    public void MoreCure(ZombieMain zombie)
+        => zombie.cure += 10;
+    public string MoreCureName()
+        => "Cure Up";
+
+
+
+    public void MoreZombiesLife(ZombieMain zombie)
+        => zombie.zombiesLife += 10;
+    public string MoreZombiesLifeName()
+        => "Zombies Life";
+
+
+
+
+
+    public int UpPrice(int upgrade)
+        => upgrade += 10;
+    
 }

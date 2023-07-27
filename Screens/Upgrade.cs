@@ -34,17 +34,25 @@ public class Upgrade
         newzombie.maxlife = zombie.maxlife;
         newzombie.movespeed = zombie.movespeed;
         newzombie.attackDamage = zombie.attackDamage;
+        newzombie.cure = zombie.cure;
+        newzombie.chance = zombie.chance;
+        newzombie.zombiesLife = zombie.zombiesLife;
+
         newzombie.maxbrains = zombie.maxbrains;
+
         newzombie.LifePrice = zombie.LifePrice;
         newzombie.DamagePrice = zombie.DamagePrice;
         newzombie.SpeedPrice = zombie.SpeedPrice;
+        newzombie.CurePrice = zombie.CurePrice;
+        newzombie.ChancePrice = zombie.ChancePrice;
+        newzombie.ZombiesLifePrice = zombie.ZombiesLifePrice;
 
-        var methodInt1 = random.Next(0, 3);
-        var methodInt2 = random.Next(0, 3);
-        var methodInt3 = random.Next(0, 3);
+        var methodInt1 = random.Next(0, 6);
+        var methodInt2 = random.Next(0, 6);
+        var methodInt3 = random.Next(0, 6);
 
 
-        selectName(methodInt1,upgrade,newzombie);
+        selectName(methodInt1, upgrade, newzombie);
         Button upgrade_card1 = new Button();
         upgrade_card1.Text = name + "-------" + actualPrice;
         upgrade_card1.Width = 300;
@@ -53,7 +61,7 @@ public class Upgrade
         form.Controls.Add(upgrade_card1);
 
 
-        selectName(methodInt2,upgrade,newzombie);
+        selectName(methodInt2, upgrade, newzombie);
         Button upgrade_card2 = new Button();
         upgrade_card2.Text = name + "-------" + actualPrice;
         upgrade_card2.Width = 300;
@@ -62,7 +70,7 @@ public class Upgrade
         form.Controls.Add(upgrade_card2);
 
 
-        selectName(methodInt3,upgrade,newzombie);
+        selectName(methodInt3, upgrade, newzombie);
         Button upgrade_card3 = new Button();
         upgrade_card3.Text = name + "-------" + actualPrice;
         upgrade_card3.Width = 300;
@@ -86,24 +94,24 @@ public class Upgrade
         textbox.AutoSize = false;
         textbox.Size = new System.Drawing.Size(100, 50);
         textbox.Font = new Font(textbox.Font.FontFamily, 20);
-
         form.Controls.Add(textbox);
 
 
         upgrade_card1.MouseDown += (s, e) =>
         {
-            selectUpgrade(methodInt1, upgrade, newzombie, form, game, Joe, gameMusic);
+            selectUpgrade(methodInt1, upgrade, newzombie, upgrade_card1, textbox);
         };
         upgrade_card2.MouseDown += (s, e) =>
         {
-            selectUpgrade(methodInt2, upgrade, newzombie, form, game, Joe, gameMusic);
+            selectUpgrade(methodInt2, upgrade, newzombie, upgrade_card2, textbox);
         };
         upgrade_card3.MouseDown += (s, e) =>
         {
-            selectUpgrade(methodInt3, upgrade, newzombie, form, game, Joe, gameMusic);
+            selectUpgrade(methodInt3, upgrade, newzombie, upgrade_card3, textbox);
         };
         Exit.MouseDown += (s, e) =>
         {
+            form.Hide();
             game.go(Joe, newzombie, gameMusic);
         };
 
@@ -111,7 +119,7 @@ public class Upgrade
         form.Show();
     }
 
-    public void selectUpgrade(int number, Upgrades upgrade, ZombieMain newzombie, Form form, Game game, Image Joe, SoundPlayer gameMusic)
+    public void selectUpgrade(int number, Upgrades upgrade, ZombieMain newzombie, Button button, TextBox textbox)
     {
         switch (number)
         {
@@ -120,10 +128,10 @@ public class Upgrade
                 {
                     newzombie.maxbrains -= newzombie.LifePrice;
                     upgrade.MoreLife(newzombie);
-                    upgrade.MoreLifePrice(newzombie.LifePrice);
-                    form.Hide();
-                    game.go(Joe, newzombie, gameMusic);
+                    upgrade.UpPrice(newzombie.LifePrice);
                     newzombie.LifePrice += 10;
+                    button.Text = name + "-------" + newzombie.LifePrice.ToString();
+                    textbox.Text = newzombie.maxbrains.ToString();
                 }
                 break;
             case 1:
@@ -131,10 +139,10 @@ public class Upgrade
                 {
                     newzombie.maxbrains -= newzombie.DamagePrice;
                     upgrade.MoreDamage(newzombie);
-                    upgrade.MoreDamagePrice(newzombie.DamagePrice);
-                    form.Hide();
-                    game.go(Joe, newzombie, gameMusic);
+                    upgrade.UpPrice(newzombie.DamagePrice);
                     newzombie.DamagePrice += 10;
+                    button.Text = name + "-------" + newzombie.DamagePrice.ToString();
+                    textbox.Text = newzombie.maxbrains.ToString();
                 }
                 break;
             case 2:
@@ -142,16 +150,49 @@ public class Upgrade
                 {
                     newzombie.maxbrains -= newzombie.SpeedPrice;
                     upgrade.MoreSpeed(newzombie);
-                    upgrade.MoreSpeedPrice(newzombie.SpeedPrice);
-                    form.Hide();
-                    game.go(Joe, newzombie, gameMusic);
+                    upgrade.UpPrice(newzombie.SpeedPrice);
                     newzombie.SpeedPrice += 10;
+                    button.Text = name + "-------" + newzombie.SpeedPrice.ToString();
+                    textbox.Text = newzombie.maxbrains.ToString();
+                }
+                break;
+            case 3:
+                if (newzombie.maxbrains >= newzombie.ChancePrice)
+                {
+                    newzombie.maxbrains -= newzombie.ChancePrice;
+                    upgrade.MoreChance(newzombie);
+                    upgrade.UpPrice(newzombie.ChancePrice);
+                    newzombie.ChancePrice += 10;
+                    button.Text = name + "-------" + newzombie.ChancePrice.ToString();
+                    textbox.Text = newzombie.maxbrains.ToString();
+                }
+                break;
+            case 4:
+                if (newzombie.maxbrains >= newzombie.CurePrice)
+                {
+                    newzombie.maxbrains -= newzombie.CurePrice;
+                    upgrade.MoreCure(newzombie);
+                    upgrade.UpPrice(newzombie.CurePrice);
+                    newzombie.CurePrice += 10;
+                    button.Text = name + "-------" + newzombie.CurePrice.ToString();
+                    textbox.Text = newzombie.maxbrains.ToString();
+                }
+                break;
+            case 5:
+                if (newzombie.maxbrains >= newzombie.ZombiesLifePrice)
+                {
+                    newzombie.maxbrains -= newzombie.ZombiesLifePrice;
+                    upgrade.MoreCure(newzombie);
+                    upgrade.UpPrice(newzombie.ZombiesLifePrice);
+                    newzombie.ZombiesLifePrice += 10;
+                    button.Text = name + "-------" + newzombie.ZombiesLifePrice.ToString();
+                    textbox.Text = newzombie.maxbrains.ToString();
                 }
                 break;
         }
     }
 
-    public string selectName(int number, Upgrades upgrade,ZombieMain newzombie)
+    public string selectName(int number, Upgrades upgrade, ZombieMain newzombie)
     {
         switch (number)
         {
@@ -167,8 +208,20 @@ public class Upgrade
                 name = upgrade.MoreSpeedName();
                 actualPrice = newzombie.SpeedPrice;
                 break;
+            case 3:
+                name = upgrade.MoreChanceName();
+                actualPrice = newzombie.ChancePrice;
+                break;
+            case 4:
+                name = upgrade.MoreCureName();
+                actualPrice = newzombie.CurePrice;
+                break;
+            case 5:
+                name = upgrade.MoreZombiesLifeName();
+                actualPrice = newzombie.ZombiesLifePrice;
+                break;
         }
-        
+
         return "";
     }
 }
