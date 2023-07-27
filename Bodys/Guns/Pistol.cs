@@ -15,7 +15,9 @@ public class Pistol : IGun
     int height = 10;
     int x => police.police.Location.X;
     int y => police.police.Location.Y;
-    public int damage = 15;
+    public int damage = 50;
+
+    public Point Target { get; set;} = new Point(-1000, -1000);
 
     public Pistol(Form form, Police police)
     {
@@ -30,14 +32,19 @@ public class Pistol : IGun
         g.FillRectangle(colorBullet, this.bullet);
     }
 
-
-    public void Shot(int zombieLiderX, int zombieLiderY, Form form)
+    public void Shot(Point joeLocation, Form form)
     {
+        if(Target == new Point(-1000, -1000))
+        {
+            Target = joeLocation;
+        }
+
+
         var BulletX = bullet.Location.X;
         var BulletY = bullet.Location.Y;
 
-        var direcaoX = (x - zombieLiderX);
-        var direcaoY = (y - zombieLiderY);
+        var direcaoX = (x - Target.X);
+        var direcaoY = (y - Target.Y);
 
         var pita = Math.Sqrt(direcaoX * direcaoX + direcaoY * direcaoY);
 
@@ -47,13 +54,13 @@ public class Pistol : IGun
         bullet.Location = new Point(BulletX, BulletY);
     }
 
-
-
     public bool hitJoe(ZombieMain Joe)
     {
         zombieRec = new Rectangle(Joe.x, Joe.y, Joe.Width, Joe.Height);
         if (!bullet.IntersectsWith(zombieRec))
             return false;
+        
+        new Point(-1000, -1000);
         
         Joe.life -= damage;
         return true;
@@ -62,6 +69,7 @@ public class Pistol : IGun
 
     public void Reload(Form form)
     {
+        Target = new Point(-1000, -1000);
         bullet.Location = new Point(x, y);
     }
 

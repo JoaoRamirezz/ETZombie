@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 public interface IGun
 {
     void Draw(Graphics g, SolidBrush color, SolidBrush colorBullet);
-    void Shot(int zombieLiderX, int zombieLiderY, Form form);
+    void Shot(Point joeLocation, Form form);
     void Reload(Form form);
     void Update(int x, int y); 
 }

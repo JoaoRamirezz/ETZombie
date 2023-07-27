@@ -21,7 +21,7 @@ public class Police : IBody
     int MovieSpeed = 1;
     Pistol pistol;
     bool flag = false;
-    int firerate = 300;
+    int firerate = 100;
     public int life = 200;
     int maxlife = 0;
 
@@ -91,14 +91,16 @@ public class Police : IBody
 
         range = Math.Sqrt(d);
 
+        var joeLoc = new Point(JoeInitialX, JoeInitialY);
+
         if (flag)
-            pistol.Shot(JoeInitialX, JoeInitialY, form);
+            pistol.Shot(joeLoc, form);
 
         if (range <= pointOfView)
         {
             flag = true;
 
-            pistol.Shot(JoeInitialX, JoeInitialY, form);
+            pistol.Shot(joeLoc, form);
             if (numberRandom.Next(0, firerate) == 2)
             {
                 pistol.Reload(form);
