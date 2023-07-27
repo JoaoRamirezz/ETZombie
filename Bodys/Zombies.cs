@@ -18,8 +18,8 @@ public class Zombie : IBody
     double velY = 0;
     double FiX;
     double FiY;
-    public int life = 5;
-    public int maxlife = 5;
+    public int life = 50;
+    public int maxlife = 0;
 
     public Zombie(int x, int y)
     {
@@ -28,6 +28,8 @@ public class Zombie : IBody
 
         backbar = new Rectangle(zombie.Location.X, zombie.Location.Y - 10, Width, 5);
         bar = new Rectangle(zombie.Location.X, zombie.Location.Y - 10, Height, 5);
+
+        maxlife = life;
 
 
         this.x = x;
