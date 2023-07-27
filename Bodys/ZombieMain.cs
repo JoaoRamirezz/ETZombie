@@ -26,17 +26,19 @@ public class ZombieMain : IBody
     public int SideY;
     bool run = false;
     public int chance = 1;
-    int maxlife = 0;
+    public int maxlife = 0;
     int barSize = 200;
 
-    public ZombieMain(Image img)
+    public ZombieMain()
     {
         zombie = new Rectangle(50, 50, 25, 25);
-        zombieImg = img;
         maxlife = life;
         backbar = new Rectangle(0, 10, barSize, 20);
         bar = new Rectangle(0, 10, barSize, 20);
     }
+
+    public void putImage(Image img)
+    => zombieImg = img;
 
     public void go(KeyEventArgs e, Wall wall)
     {
@@ -136,7 +138,14 @@ public class ZombieMain : IBody
     public bool intersectShot(Rectangle bullet)
     => this.zombie.IntersectsWith(bullet);
 
-
+    public bool intersectPolice(Police police)
+    {
+        Rectangle Rect = new Rectangle(police.x, police.y, police.width, police.height);
+        if (this.zombie.IntersectsWith(Rect))
+            return true;
+        return false;
+    }
+    
     public bool intersect(Human human)
     {
         Rectangle Rect = new Rectangle(human.x, human.y, human.width, human.height);

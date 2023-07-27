@@ -21,6 +21,10 @@ public class Police : IBody
     int MovieSpeed = 1;
     Pistol pistol;
     bool flag = false;
+    int firerate = 300;
+    public int life = 200;
+    int maxlife = 0;
+
 
     public Police(Form form, List<Pistol> pistols)
     {
@@ -35,7 +39,28 @@ public class Police : IBody
         bar = new Rectangle(police.Location.X, police.Location.Y - 10, width, 5);
         pistol = new Pistol(form, this);
         pistols.Add(pistol);
+        maxlife = life;
 
+    }
+
+    public void TakeDamage(bool damage, int attack)
+    {
+        if (damage)
+            Damage(attack);
+    }
+
+    public void Damage(int attack)
+    {
+        life -= attack;
+        try
+        {
+            int d = life * width / maxlife;
+            if (d < 0)
+                d = 0;
+            bar.Size = new Size(d, 5);
+        }
+
+        catch (System.Exception) { }
     }
 
     public void Draw(Graphics g, SolidBrush color)
@@ -74,7 +99,7 @@ public class Police : IBody
             flag = true;
 
             pistol.Shot(JoeInitialX, JoeInitialY, form);
-            if (numberRandom.Next(0, 100) == 2)
+            if (numberRandom.Next(0, firerate) == 2)
             {
                 pistol.Reload(form);
             }

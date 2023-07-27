@@ -10,7 +10,7 @@ public class Pistol : IGun
     private ZombieMain zombieMain;
     Rectangle pistol;
     public Rectangle bullet;
-    double VeloBullet = 15;
+    double VeloBullet = 5;
     int width = 10;
     int height = 10;
     int x => police.police.Location.X;

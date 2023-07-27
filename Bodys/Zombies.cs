@@ -164,6 +164,13 @@ public class Zombie : IBody
             return true;
         return false;
     }
+    public bool intersectPolice(Police police)
+    {
+        Rectangle Rect = new Rectangle(police.x, police.y, police.width, police.height);
+        if (this.zombie.IntersectsWith(Rect))
+            return true;
+        return false;
+    }
     
     public bool intersectShot(Rectangle bullet)
     => this.zombie.IntersectsWith(bullet);
