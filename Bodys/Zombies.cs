@@ -6,14 +6,16 @@ using System.Collections.Generic;
 public class Zombie : IBody
 {
 
+    Image zombieImg;
+
     Rectangle bar;
     Rectangle backbar;
     Rectangle zombie;
     public int attackdamage = 1;
     public int x;
     public int y;
-    public int Width = 20;
-    public int Height = 20;
+    public int Width = 30;
+    public int Height = 25;
     double velX = 0;
     double velY = 0;
     double FiX;
@@ -22,11 +24,12 @@ public class Zombie : IBody
     public int maxlife = 0;
     int speed = 10000;
 
+    int distanceImg = 3;
+
+
     public Zombie(int x, int y)
     {
         zombie = new Rectangle(x, y, Width, Height);
-
-
         backbar = new Rectangle(zombie.Location.X, zombie.Location.Y - 10, Width, 5);
         bar = new Rectangle(zombie.Location.X, zombie.Location.Y - 10, Height, 5);
 
@@ -44,13 +47,25 @@ public class Zombie : IBody
         g.FillRectangle(new SolidBrush(Color.Red), bar);
     }
 
+    public void putImage(Image img)
+        => zombieImg = img;
+
+    public void draw(Graphics g)
+    {
+        GraphicsUnit units = GraphicsUnit.Pixel;
+        g.DrawImage(zombieImg, zombie, distanceImg, 0, 35, 40,units);
+        g.FillRectangle(new SolidBrush(Color.Black), backbar);
+        g.FillRectangle(new SolidBrush(Color.Red), bar);
+    }
+
     public void Spaw(int x, int y)
     {
         zombie.Location = new Point(x, y);
     }
 
-    public void TakeDamage(bool damage, int attack){
-        if(damage)
+    public void TakeDamage(bool damage, int attack)
+    {
+        if (damage)
             Damage(attack);
     }
 
@@ -143,6 +158,10 @@ public class Zombie : IBody
             x = (int)(zombie.zombie.Location.X + zombie.velX * time);
             y = (int)(zombie.zombie.Location.Y + zombie.velY * time);
 
+            zombie.distanceImg += 40;
+            if(zombie.distanceImg >= 140)
+                zombie.distanceImg = 2;
+
             zombie.zombie.Location = new Point(x, y);
             zombie.backbar.Location = new Point(x, y - 10);
             zombie.bar.Location = new Point(x, y - 10);
@@ -168,7 +187,7 @@ public class Zombie : IBody
             return true;
         return false;
     }
-    
+
     public bool intersectShot(Rectangle bullet)
     => this.zombie.IntersectsWith(bullet);
 }
