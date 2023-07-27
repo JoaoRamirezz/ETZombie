@@ -4,12 +4,19 @@ using System.Windows.Forms;
 
 public class ZombieMain : IBody
 {
+
     Rectangle bar;
     Rectangle backbar;
     Rectangle zombie;
     Rectangle mask;
-
     Image zombieImg;
+
+    
+    public int LifePrice = 10;
+    public int DamagePrice = 10;
+    public int SpeedPrice = 10;
+    
+    public int maxbrains = 0;
     int distanceImg = 3;
     public int life = 200;
     public int movespeed = 2;

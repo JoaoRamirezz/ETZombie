@@ -1,11 +1,12 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Media;
 
 public class Start
 {
     ZombieMain Joe;
-    public void go()
+    public void go(SoundPlayer music)
     {
         Game game = new Game();
         Upgrade upgrade = new Upgrade();
@@ -42,7 +43,7 @@ public class Start
 
         play.MouseDown += (s, e) =>
         {
-            game.go(JoeImg, Joe);
+            game.go(JoeImg, Joe, music);
             form.Hide();
         };
 

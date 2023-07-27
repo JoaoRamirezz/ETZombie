@@ -3,6 +3,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Media;
 
 public class Game
 {
@@ -12,7 +13,7 @@ public class Game
     private Random number = new Random();
     private int brain = 0;
 
-    private Rectangle bullet;
+
     private List<IBody> bodys;
     private List<Zombie> zombies;
     private List<Human> humans;
@@ -23,16 +24,13 @@ public class Game
     private Police police;
     private Zombie zombie;
     private Wall wall;
-    int MoreLifePrice;
-    int MoreDamagePrice;
-    int MoreMovePrice;
-    public string name = "";
     int pct;
     bool dead = false;
     bool flag = true;
 
-    public void go(Image JoeImg, ZombieMain zombieMain)
+    public void go(Image JoeImg, ZombieMain zombieMain, SoundPlayer music)
     {
+        music.PlayLooping();
         pct = number.Next(zombieMain.chance, 20);
 
         bodys = new List<IBody>();
@@ -71,6 +69,8 @@ public class Game
         var timer = new Timer();
         timer.Interval = 30;
 
+        zombieMain.life = zombieMain.maxlife;
+
         Application.Idle += delegate
         {
             while (running)
@@ -78,10 +78,11 @@ public class Game
                 if (zombieMain.life <= 0)
                     break; 
 
-
+                
                 GraphicsUnit units = GraphicsUnit.Pixel;
-                g.DrawString("Brains: " + brain.ToString(), new Font("arial", 20), Brushes.Black, 0, 50);
-                g.DrawString(zombieMain.maxlife.ToString(), new Font("arial", 10), Brushes.Black, 210, 0);
+                g.DrawString("Brains: " + brain.ToString(), new Font("arial", 15), Brushes.Black, 0, 40);
+                g.DrawString("Horde: " + zombies.Count.ToString(), new Font("arial", 15), Brushes.Black, 0, 70);
+                g.DrawString(zombieMain.life.ToString(), new Font("arial", 10), Brushes.Black, 210, 0);
                 zombieMain.draw(g);
                 zombieMain.Update();
 
@@ -205,9 +206,11 @@ public class Game
 
             while (flag)
             {
-                upgrade.go(zombieFlag);
+                music.Stop();
+                zombieFlag.maxbrains += brain;
                 form.Hide();
                 flag = false;
+                upgrade.go(zombieFlag,music);
             }
         };
 
