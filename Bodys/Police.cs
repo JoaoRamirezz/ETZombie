@@ -20,6 +20,11 @@ public class Police : IBody
     double direcaoY;
     int MovieSpeed = 1;
     Pistol pistol;
+    bool flag = false;
+    int firerate = 300;
+    public int life = 200;
+    int maxlife = 0;
+
 
     public Police(Form form, List<Pistol> pistols)
     {
@@ -34,14 +39,34 @@ public class Police : IBody
         bar = new Rectangle(police.Location.X, police.Location.Y - 10, width, 5);
         pistol = new Pistol(form, this);
         pistols.Add(pistol);
+        maxlife = life;
 
     }
 
+    public void TakeDamage(bool damage, int attack)
+    {
+        if (damage)
+            Damage(attack);
+    }
+
+    public void Damage(int attack)
+    {
+        life -= attack;
+        try
+        {
+            int d = life * width / maxlife;
+            if (d < 0)
+                d = 0;
+            bar.Size = new Size(d, 5);
+        }
+
+        catch (System.Exception) { }
+    }
 
     public void Draw(Graphics g, SolidBrush color)
     {
         g.FillRectangle(color, this.police);
-        pistol.Draw(g, new SolidBrush(Color.Orange), new SolidBrush(Color.BlueViolet));
+        pistol.Draw(g, new SolidBrush(Color.Orange), new SolidBrush(Color.Gray));
         g.FillRectangle(new SolidBrush(Color.Black), backbar);
         g.FillRectangle(new SolidBrush(Color.Red), bar);
     }
@@ -50,13 +75,15 @@ public class Police : IBody
     {
         police.Location = new Point(x, y);
 
-
         backbar.Location = new Point(x, y - 10);
         bar.Location = new Point(x, y - 10);
     }
 
-    public void ToSearchFor(ZombieMain Joe ,Form form, List<Zombie> zombies)
+    public void ToSearchFor(ZombieMain Joe, Form form, List<Zombie> zombies)
     {
+        var JoeInitialX = Joe.x;
+        var JoeInitialY = Joe.y;
+
         x = police.Location.X;
         y = police.Location.Y;
 
@@ -64,16 +91,19 @@ public class Police : IBody
 
         range = Math.Sqrt(d);
 
+        if (flag)
+            pistol.Shot(JoeInitialX, JoeInitialY, form);
+
         if (range <= pointOfView)
         {
-            if (range <= pointOfView)
+            flag = true;
+
+            pistol.Shot(JoeInitialX, JoeInitialY, form);
+            if (numberRandom.Next(0, firerate) == 2)
             {
-                pistol.Shot(Joe.x, Joe.y, form);
-                if (numberRandom.Next(0, 250) == 2)
-                {
-                    pistol.Reload(form);
-                }
+                pistol.Reload(form);
             }
+
 
             direcaoX = -(x - Joe.x);
             direcaoY = -(y - Joe.y);

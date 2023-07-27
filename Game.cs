@@ -3,15 +3,17 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
-
+using System.Media;
 
 public class Game
 {
+
+    Upgrade upgrade = new Upgrade();
+
     private Random number = new Random();
     private int brain = 0;
 
 
-    private Rectangle bullet;
     private List<IBody> bodys;
     private List<Zombie> zombies;
     private List<Human> humans;
@@ -19,15 +21,19 @@ public class Game
     private List<Pistol> pistols;
 
 
-    private ZombieMain zombieMain;
     private Human human;
     private Police police;
     private Zombie zombie;
     private Wall wall;
+    int pct;
+    bool dead = false;
+    bool flag = true;
 
-
-    public void go()
+    public void go(Image JoeImg, ZombieMain zombieMain, SoundPlayer music)
     {
+        music.PlayLooping();
+        pct = number.Next(zombieMain.chance, 20);
+
         bodys = new List<IBody>();
         zombies = new List<Zombie>();
         humans = new List<Human>();
@@ -36,14 +42,9 @@ public class Game
 
         bool running = true;
 
-        ApplicationConfiguration.Initialize();
-
-
         Graphics g = null;
         Bitmap bmp = null;
-        Image Joe = Image.FromFile("imagens/JoeSprites.png");
         Rectangle ImgRec = new Rectangle(0, 0, 120, 120);
-
 
         var form = new Form();
         form.WindowState = FormWindowState.Maximized;
@@ -52,33 +53,36 @@ public class Game
         PictureBox pb = new PictureBox();
         pb.Dock = DockStyle.Fill;
         form.Controls.Add(pb);
+        zombieMain.putImage(JoeImg);
 
+        var zombieFlag = zombieMain;
 
-        zombieMain = new ZombieMain(Joe);
         human = new Human(form);
         police = new Police(form, pistols);
         zombie = new Zombie(human.x, human.y);
         // wall = new Wall(50,50,30,100);
 
-
         var killed = false;
 
-
         generateBots(100, 10, form);
-
 
         var timer = new Timer();
         timer.Interval = 30;
 
-
+        zombieMain.life = zombieMain.maxlife;
 
         Application.Idle += delegate
         {
             while (running)
             {
+                if (zombieMain.life <= 0)
+                    break; 
 
+                
                 GraphicsUnit units = GraphicsUnit.Pixel;
-                g.DrawString("Brains: " + brain.ToString(), new Font("arial", 20), Brushes.Black, 0, 50);
+                g.DrawString("Brains: " + brain.ToString(), new Font("arial", 15), Brushes.Black, 0, 40);
+                g.DrawString("Horde: " + zombies.Count.ToString(), new Font("arial", 15), Brushes.Black, 0, 70);
+                g.DrawString(zombieMain.life.ToString(), new Font("arial", 10), Brushes.Black, 210, 0);
                 zombieMain.draw(g);
                 zombieMain.Update();
 
@@ -115,18 +119,22 @@ public class Game
                     }
                 }
 
-
-                foreach (var p in polices)
+                for (int p = 0; p < polices.Count; p++)
                 {
-                    p.Draw(g, new SolidBrush(Color.Blue));
-                    p.ToSearchFor(zombieMain, form, zombies);
-                    p.Update();
+
+                    polices[p].Draw(g, new SolidBrush(Color.Blue));
+                    polices[p].ToSearchFor(zombieMain, form, zombies);
+                    polices[p].Update();
+                    polices[p].TakeDamage(zombieMain.intersectPolice(polices[p]), zombieMain.attackDamage);
+
+                    if (polices[p].life <= 0)
+                    {
+                        polices.Remove(polices[p]);
+                        p -= 1;
+                    }
                 }
 
-
-
-                for (int j = 0; j < zombies.Count; j++)
-                {
+                for (int j = 0; j < zombies.Count; j++){
                     zombies[j].Draw(g, new SolidBrush(Color.Green));
 
                     for (int i = 0; i < humans.Count; i++)
@@ -141,11 +149,22 @@ public class Game
                             break;
                         }
                     }
+
+                    for (int p = 0; p < polices.Count; p++)
+                    {
+                        polices[p].TakeDamage(zombies[j].intersectPolice(polices[p]), zombies[j].attackdamage);
+
+                        if (polices[p].life <= 0)
+                        {
+                            polices.Remove(polices[p]);
+                            p -= 1;
+                            break;
+                        }
+                    }
+
                     if (killed)
                         break;
                 }
-
-                killed = false;
 
                 foreach (var p in pistols)
                 {
@@ -160,16 +179,33 @@ public class Game
                         }
                     }
 
-                    zombieMain.TakeDamage(zombieMain.intersectShot(p.bullet),p.damage);
+                    zombieMain.TakeDamage(zombieMain.intersectShot(p.bullet), p.damage);
+                    if (zombieMain.life <= 0)
+                    {
+                        dead = true;
+                        break; 
+                    }
                 }
+                if(dead)
+                    break;
 
 
+                killed = false;
 
                 zombie.DrunkZombie(zombies, zombieMain.x, zombieMain.y);
 
                 pb.Refresh();
                 g.Clear(Color.Transparent);
                 Application.DoEvents();
+            }
+
+            while (flag)
+            {
+                music.Stop();
+                zombieFlag.maxbrains += brain;
+                form.Hide();
+                flag = false;
+                upgrade.go(zombieFlag,music);
             }
         };
 
@@ -197,16 +233,11 @@ public class Game
         };
 
         form.KeyPreview = true;
-        Application.Run(form);
+        form.Show();
     }
-
-
-
 
     public void newZombie(Human human)
     {
-        var pct = number.Next(zombieMain.chance, 20);
-
         if (pct == pct)
         {
             var zombie = new Zombie(human.x, human.y);
@@ -221,7 +252,6 @@ public class Game
             brain += 1;
         }
     }
-
 
     public void generateBots(int qttHumans, int qttPolices, Form form)
     {
@@ -239,6 +269,5 @@ public class Game
         }
 
     }
-
 
 }

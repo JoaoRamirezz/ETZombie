@@ -4,13 +4,19 @@ using System.Windows.Forms;
 
 public class ZombieMain : IBody
 {
+
     Rectangle bar;
     Rectangle backbar;
     Rectangle zombie;
     Rectangle mask;
-
     Image zombieImg;
 
+    
+    public int LifePrice = 10;
+    public int DamagePrice = 10;
+    public int SpeedPrice = 10;
+    
+    public int maxbrains = 0;
     int distanceImg = 3;
     public int life = 200;
     public int movespeed = 2;
@@ -27,20 +33,19 @@ public class ZombieMain : IBody
     public int SideY;
     bool run = false;
     public int chance = 1;
-    int maxlife = 0;
+    public int maxlife = 0;
     int barSize = 200;
 
-
-
-    public ZombieMain(Image img)
+    public ZombieMain()
     {
         zombie = new Rectangle(50, 50, 25, 25);
-        zombieImg = img;
         maxlife = life;
         backbar = new Rectangle(0, 10, barSize, 20);
         bar = new Rectangle(0, 10, barSize, 20);
     }
 
+    public void putImage(Image img)
+    => zombieImg = img;
 
     public void go(KeyEventArgs e, Wall wall)
     {
@@ -49,8 +54,6 @@ public class ZombieMain : IBody
 
         SideX = velX;
         SideY = velY;
-
-
 
         if (e.KeyCode == Keys.D)
         {
@@ -79,7 +82,6 @@ public class ZombieMain : IBody
         Update();
 
     }
-
 
     public void stop(KeyEventArgs e)
     {
@@ -123,16 +125,13 @@ public class ZombieMain : IBody
         if (distanceImg >= 140)
             distanceImg = 2;
 
-        zombie.Location = new Point(x, y);
-
+        zombie.Location = new Point(x, y);    
     }
-
 
     public void Draw(Graphics g, SolidBrush color)
     {
         g.FillRectangle(color, this.zombie);
     }
-
 
     public void draw(Graphics g)
     {
@@ -146,13 +145,19 @@ public class ZombieMain : IBody
     public bool intersectShot(Rectangle bullet)
     => this.zombie.IntersectsWith(bullet);
 
-
+    public bool intersectPolice(Police police)
+    {
+        Rectangle Rect = new Rectangle(police.x, police.y, police.width, police.height);
+        if (this.zombie.IntersectsWith(Rect))
+            return true;
+        return false;
+    }
+    
     public bool intersect(Human human)
     {
         Rectangle Rect = new Rectangle(human.x, human.y, human.width, human.height);
         return this.zombie.IntersectsWith(Rect);
     }
-
 
     public bool CollideWallX(Wall wall)
     {
