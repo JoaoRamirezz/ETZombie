@@ -8,8 +8,8 @@ public class BrainPoison : IBody
 
     Random numberRandom = new Random();
     Rectangle brainpoison;
-    public int width = 10;
-    public int height = 10;
+    public int width = 20;
+    public int height = 20;
     public int x = 0;
     public int y = 0;
 
@@ -26,12 +26,7 @@ public class BrainPoison : IBody
         this.y = brainpoison.Location.Y;
     }
 
-    public void Draw(Graphics g, SolidBrush color)
-    {
-        g.FillRectangle(color, this.brainpoison);
-    }
-
-    public void draw(Graphics g)
+    public void Draw(Graphics g)
     {
         GraphicsUnit units = GraphicsUnit.Pixel;
         g.DrawImage(brainImg, brainpoison, 3, 0, 35, 40, units);

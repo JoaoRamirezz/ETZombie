@@ -5,16 +5,17 @@ using System.Collections.Generic;
 
 public class Pistol : IGun
 {
+    Image PistolImg;
     Rectangle zombieRec;
     private Police police;
     private ZombieMain zombieMain;
     Rectangle pistol;
     public Rectangle bullet;
     double VeloBullet = 5;
-    int width = 10;
-    int height = 10;
-    int x => police.police.Location.X;
-    int y => police.police.Location.Y;
+    int width = 20;
+    int height = 15;
+    int x => police.police.Location.X - 8;
+    int y => police.police.Location.Y + 10;
     public int damage = 50;
 
     public Point Target { get; set;} = new Point(-1000, -1000);
@@ -26,9 +27,18 @@ public class Pistol : IGun
         bullet = new Rectangle(x, y, 7, 7);
     }
 
-    public void Draw(Graphics g, SolidBrush color, SolidBrush colorBullet)
+    public void Draw(Graphics g, Image gunImg, SolidBrush colorBullet)
     {
-        g.FillRectangle(color, this.pistol);
+        PistolImg = gunImg;
+        GraphicsUnit units = GraphicsUnit.Pixel;
+        if(gunImg.Width > 100)
+        {
+            
+            pistol.Width = 120;
+            g.DrawImage(gunImg, pistol, 0, 0, 88, 40,units);
+        }
+
+        g.DrawImage(gunImg, pistol, 3, 0, 61, 50,units);
         g.FillRectangle(colorBullet, this.bullet);
     }
 
@@ -76,6 +86,6 @@ public class Pistol : IGun
     public void Update(int x, int y)
     {
         police = this.police;
-        pistol.Location = new Point(x, y);
+        pistol.Location = new Point(x - 8, y + 10);
     }
 }

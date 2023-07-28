@@ -18,8 +18,8 @@ public class Human : IBody
     public int life = 10;
     public int x;
     public int y;
-    public int width = 20;
-    public int height = 20;
+    public int width = 35;
+    public int height = 30;
 
     int maxSpeed = 1;
     double direcaoX;
@@ -31,9 +31,9 @@ public class Human : IBody
     public Human(Form form)
     {
         human = new Rectangle(
-        numberRandom.Next(0,1200), 
-        numberRandom.Next(0,1200),
-        width, 
+        numberRandom.Next(0, 1200),
+        numberRandom.Next(0, 1200),
+        width,
         height);
 
         backbar = new Rectangle(human.Location.X, human.Location.Y - 10, width, 5);
@@ -46,16 +46,17 @@ public class Human : IBody
     public void putImage(Image img)
         => humanImg = img;
 
-    public void draw(Graphics g)
+    public void Draw(Graphics g)
     {
         GraphicsUnit units = GraphicsUnit.Pixel;
-        g.DrawImage(humanImg, human, distanceImg, 0, 35, 40,units);
+        g.DrawImage(humanImg, human, distanceImg, 0, 35, 40, units);
         g.FillRectangle(new SolidBrush(Color.Black), backbar);
         g.FillRectangle(new SolidBrush(Color.Red), bar);
     }
 
-    public void TakeDamage(bool damage, int attack){
-        if(damage)
+    public void TakeDamage(bool damage, int attack)
+    {
+        if (damage)
             Damage(attack);
     }
 
@@ -65,12 +66,12 @@ public class Human : IBody
         try
         {
             int d = life * width / maxlife;
-            if (d < 0) 
+            if (d < 0)
                 d = 0;
-            bar.Size = new Size(d, 5);   
+            bar.Size = new Size(d, 5);
         }
 
-        catch (System.Exception){}
+        catch (System.Exception) { }
     }
 
     public void Draw(Graphics g, SolidBrush color)
@@ -78,6 +79,7 @@ public class Human : IBody
         g.FillRectangle(color, this.human);
         g.FillRectangle(new SolidBrush(Color.Black), backbar);
         g.FillRectangle(new SolidBrush(Color.Red), bar);
+
     }
 
     public void Update()
@@ -86,6 +88,10 @@ public class Human : IBody
 
         backbar.Location = new Point(x, y - 10);
         bar.Location = new Point(x, y - 10);
+
+        distanceImg += 40;
+        if (distanceImg >= 140)
+            distanceImg = 2;
     }
 
     public void escape(int zombieX, int zombieY)
@@ -103,7 +109,7 @@ public class Human : IBody
             direcaoY = -(y - zombieY);
 
             double pita = Math.Sqrt(direcaoX * direcaoX + direcaoY * direcaoY);
-            
+
             try
             {
                 x -= (int)direcaoX / (int)pita * maxSpeed;
@@ -111,9 +117,9 @@ public class Human : IBody
             }
             catch (System.Exception)
             {
-            
+
             }
-             
+
         }
     }
 }

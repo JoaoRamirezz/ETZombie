@@ -14,8 +14,8 @@ public class Zombie : IBody
     public int attackdamage = 1;
     public int x;
     public int y;
-    public int Width = 30;
-    public int Height = 25;
+    public int Width = 40;
+    public int Height = 35;
     double velX = 0;
     double velY = 0;
     double FiX;
@@ -40,17 +40,10 @@ public class Zombie : IBody
         this.y = y;
     }
 
-    public void Draw(Graphics g, SolidBrush color)
-    {
-        g.FillRectangle(color, this.zombie);
-        g.FillRectangle(new SolidBrush(Color.Black), backbar);
-        g.FillRectangle(new SolidBrush(Color.Red), bar);
-    }
-
     public void putImage(Image img)
         => zombieImg = img;
 
-    public void draw(Graphics g)
+    public void Draw(Graphics g)
     {
         GraphicsUnit units = GraphicsUnit.Pixel;
         g.DrawImage(zombieImg, zombie, distanceImg, 0, 35, 40,units);
