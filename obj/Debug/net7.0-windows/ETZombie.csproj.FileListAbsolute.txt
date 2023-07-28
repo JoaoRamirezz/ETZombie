@@ -58,3 +58,18 @@ C:\Users\User\Desktop\ETZombie\obj\Debug\net7.0-windows\refint\ETZombie.dll
 C:\Users\User\Desktop\ETZombie\obj\Debug\net7.0-windows\ETZombie.pdb
 C:\Users\User\Desktop\ETZombie\obj\Debug\net7.0-windows\ETZombie.genruntimeconfig.cache
 C:\Users\User\Desktop\ETZombie\obj\Debug\net7.0-windows\ref\ETZombie.dll
+C:\Users\muril\OneDrive\Área de Trabalho\ETZombie\bin\Debug\net7.0-windows\ETZombie.exe
+C:\Users\muril\OneDrive\Área de Trabalho\ETZombie\bin\Debug\net7.0-windows\ETZombie.deps.json
+C:\Users\muril\OneDrive\Área de Trabalho\ETZombie\bin\Debug\net7.0-windows\ETZombie.runtimeconfig.json
+C:\Users\muril\OneDrive\Área de Trabalho\ETZombie\bin\Debug\net7.0-windows\ETZombie.dll
+C:\Users\muril\OneDrive\Área de Trabalho\ETZombie\bin\Debug\net7.0-windows\ETZombie.pdb
+C:\Users\muril\OneDrive\Área de Trabalho\ETZombie\obj\Debug\net7.0-windows\ETZombie.csproj.AssemblyReference.cache
+C:\Users\muril\OneDrive\Área de Trabalho\ETZombie\obj\Debug\net7.0-windows\ETZombie.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\muril\OneDrive\Área de Trabalho\ETZombie\obj\Debug\net7.0-windows\ETZombie.AssemblyInfoInputs.cache
+C:\Users\muril\OneDrive\Área de Trabalho\ETZombie\obj\Debug\net7.0-windows\ETZombie.AssemblyInfo.cs
+C:\Users\muril\OneDrive\Área de Trabalho\ETZombie\obj\Debug\net7.0-windows\ETZombie.csproj.CoreCompileInputs.cache
+C:\Users\muril\OneDrive\Área de Trabalho\ETZombie\obj\Debug\net7.0-windows\ETZombie.dll
+C:\Users\muril\OneDrive\Área de Trabalho\ETZombie\obj\Debug\net7.0-windows\refint\ETZombie.dll
+C:\Users\muril\OneDrive\Área de Trabalho\ETZombie\obj\Debug\net7.0-windows\ETZombie.pdb
+C:\Users\muril\OneDrive\Área de Trabalho\ETZombie\obj\Debug\net7.0-windows\ETZombie.genruntimeconfig.cache
+C:\Users\muril\OneDrive\Área de Trabalho\ETZombie\obj\Debug\net7.0-windows\ref\ETZombie.dll

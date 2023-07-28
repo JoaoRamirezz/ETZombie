@@ -6,6 +6,9 @@ using System.Drawing;
 
 public class Human : IBody
 {
+    Image humanImg;
+    int distanceImg = 3;
+
     Rectangle human;
     Random numberRandom = Random.Shared;
     Rectangle bar;
@@ -27,7 +30,6 @@ public class Human : IBody
 
     public Human(Form form)
     {
-        
         human = new Rectangle(
         numberRandom.Next(0,1200), 
         numberRandom.Next(0,1200),
@@ -39,6 +41,17 @@ public class Human : IBody
 
         this.x = human.Location.X;
         this.y = human.Location.Y;
+    }
+
+    public void putImage(Image img)
+        => humanImg = img;
+
+    public void draw(Graphics g)
+    {
+        GraphicsUnit units = GraphicsUnit.Pixel;
+        g.DrawImage(humanImg, human, distanceImg, 0, 35, 40,units);
+        g.FillRectangle(new SolidBrush(Color.Black), backbar);
+        g.FillRectangle(new SolidBrush(Color.Red), bar);
     }
 
     public void TakeDamage(bool damage, int attack){
