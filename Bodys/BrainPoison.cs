@@ -5,7 +5,6 @@ using System.Drawing;
 public class BrainPoison : IBody
 {
     Image brainImg;
-
     Random numberRandom = new Random();
     Rectangle brainpoison;
     public int width = 20;

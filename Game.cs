@@ -169,6 +169,8 @@ public class Game
                     polices[p].ToSearchFor(zombieMain, form, zombies);
                     polices[p].Update();
                     polices[p].TakeDamage(zombieMain.intersectPolice(polices[p]), zombieMain.attackDamage);
+                    if(polices[p].life <= 0)
+                        polices.Remove(polices[p]);
                 }
 
                 for (int j = 0; j < zombies.Count; j++)
