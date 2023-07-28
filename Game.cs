@@ -11,6 +11,9 @@ public class Game
     Image imageZombie;
     Image imageHuman;
     Image imageBrain;
+    Image imageMap;
+
+    Rectangle map;
 
     Upgrade upgrade = new Upgrade();
 
@@ -21,6 +24,7 @@ public class Game
     private List<Image> policesImg;
     private List<Image> humansImg;
     private List<Image> brainsImg;
+    private Image mapImg;
 
 
     private List<IBody> bodys;
@@ -64,6 +68,8 @@ public class Game
 
         brainsImg.Add(Image.FromFile("imagens/pocao.png"));
 
+        mapImg = Image.FromFile("Screens/images/map.png");
+
         bodys = new List<IBody>();
         zombies = new List<Zombie>();
         humans = new List<Human>();
@@ -80,8 +86,6 @@ public class Game
         var form = new Form();
         form.WindowState = FormWindowState.Maximized;
         form.FormBorderStyle = FormBorderStyle.None;
-        form.BackgroundImage = Image.FromFile("Screens/images/map.png");
-
 
         PictureBox pb = new PictureBox();
         pb.Dock = DockStyle.Fill;
@@ -108,6 +112,9 @@ public class Game
         {
             while (running)
             {
+                putImage(mapImg);
+                draw(g);
+
                 if (zombieMain.life <= 0)
                     break;
 
@@ -276,6 +283,15 @@ public class Game
 
         form.KeyPreview = true;
         form.Show();
+    }
+
+    public void putImage(Image img)
+        => mapImg = img;
+
+    public void draw(Graphics g)
+    {
+        GraphicsUnit units = GraphicsUnit.Pixel;
+        g.DrawImage(mapImg, map, 3, 0, 35, 40,units);
     }
 
     public void newZombie(Human human, ZombieMain zombieMain)
