@@ -11,7 +11,6 @@ public class Game
     Image imageZombie;
     Image imageHuman;
     Image imageBrain;
-    Image imageMap;
 
     Rectangle map;
 
@@ -25,7 +24,6 @@ public class Game
     private List<Image> humansImg;
     private List<Image> brainsImg;
     private Image mapImg;
-
 
     private List<IBody> bodys;
     private List<Zombie> zombies;
@@ -54,6 +52,8 @@ public class Game
         policesImg = new List<Image>();
         brainsImg = new List<Image>();
 
+        mapImg = Image.FromFile("imagens/map.png");
+
         zombiesImg.Add(Image.FromFile("imagens/zombines1.png"));
         zombiesImg.Add(Image.FromFile("imagens/zombines2.png"));
         zombiesImg.Add(Image.FromFile("imagens/zombines3.png"));
@@ -67,8 +67,6 @@ public class Game
         humansImg.Add(Image.FromFile("imagens/npc4.png"));
 
         brainsImg.Add(Image.FromFile("imagens/pocao.png"));
-
-        mapImg = Image.FromFile("Screens/images/map.png");
 
         bodys = new List<IBody>();
         zombies = new List<Zombie>();
@@ -291,7 +289,7 @@ public class Game
     public void draw(Graphics g)
     {
         GraphicsUnit units = GraphicsUnit.Pixel;
-        g.DrawImage(mapImg, map, 3, 0, 35, 40,units);
+        g.DrawImage(mapImg, map, 0, 0, 500, 500, units);
     }
 
     public void newZombie(Human human, ZombieMain zombieMain)
