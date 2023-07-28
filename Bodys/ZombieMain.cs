@@ -4,7 +4,6 @@ using System.Windows.Forms;
 
 public class ZombieMain : IBody
 {
-
     Rectangle bar;
     Rectangle backbar;
     Rectangle zombie;
@@ -14,7 +13,6 @@ public class ZombieMain : IBody
     public int cure = 40;
     public int zombiesLife = 10;
 
-
     public int LifePrice = 10;
     public int DamagePrice = 10;
     public int SpeedPrice = 10;
@@ -22,7 +20,6 @@ public class ZombieMain : IBody
     public int CurePrice = 10;
     public int ZombiesLifePrice = 10;
     
-
     public int maxbrains = 0;
     int distanceImg = 3;
     public int life = 200;

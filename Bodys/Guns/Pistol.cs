@@ -39,7 +39,6 @@ public class Pistol : IGun
             Target = joeLocation;
         }
 
-
         var BulletX = bullet.Location.X;
         var BulletY = bullet.Location.Y;
 
