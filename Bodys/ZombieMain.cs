@@ -10,7 +10,7 @@ public class ZombieMain : IBody
     Rectangle mask;
     Image zombieImg;
 
-    public int cure = 40;
+    public int cure = 20;
     public int zombiesLife = 10;
 
     public int LifePrice = 10;
@@ -31,8 +31,8 @@ public class ZombieMain : IBody
     bool goRight = false;
     bool goTop = false;
     bool goDown = false;
-    public int Width = 20;
-    public int Height = 20;
+    public int Width = 30;
+    public int Height = 30;
     public int SideX;
     public int SideY;
     bool run = false;
@@ -42,7 +42,7 @@ public class ZombieMain : IBody
 
     public ZombieMain()
     {
-        zombie = new Rectangle(50, 50, 25, 25);
+        zombie = new Rectangle(50, 50, Width, Height);
         maxlife = life;
         backbar = new Rectangle(0, 10, barSize, 20);
         bar = new Rectangle(0, 10, barSize, 20);
@@ -51,7 +51,7 @@ public class ZombieMain : IBody
     public void putImage(Image img)
     => zombieImg = img;
 
-    public void go(KeyEventArgs e, Wall wall)
+    public void go(KeyEventArgs e)
     {
         int velX = e.KeyCode == Keys.A ? movespeed * -1 : e.KeyCode == Keys.D ? movespeed : 0;
         int velY = e.KeyCode == Keys.W ? movespeed * -1 : e.KeyCode == Keys.S ? movespeed : 0;
@@ -132,12 +132,7 @@ public class ZombieMain : IBody
         zombie.Location = new Point(x, y);    
     }
 
-    public void Draw(Graphics g, SolidBrush color)
-    {
-        g.FillRectangle(color, this.zombie);
-    }
-
-    public void draw(Graphics g)
+    public void Draw(Graphics g)
     {
         GraphicsUnit units = GraphicsUnit.Pixel;
         g.DrawImage(zombieImg, zombie, distanceImg, 0, 35, 55, units);
@@ -167,21 +162,21 @@ public class ZombieMain : IBody
         return this.zombie.IntersectsWith(Rect);
     }
 
-    public bool CollideWallX(Wall wall)
-    {
-        mask = new Rectangle(zombie.X, zombie.Y, zombie.Width, zombie.Height);
-        if (wall.Colision(mask) && goLeft || wall.Colision(mask) && goRight)
-            return true;
-        return false;
-    }
+    // public bool CollideWallX(Wall wall)
+    // {
+    //     mask = new Rectangle(zombie.X, zombie.Y, zombie.Width, zombie.Height);
+    //     if (wall.Colision(mask) && goLeft || wall.Colision(mask) && goRight)
+    //         return true;
+    //     return false;
+    // }
 
-    public bool CollideWallY(Wall wall)
-    {
-        mask = new Rectangle(zombie.X, zombie.Y, zombie.Width, zombie.Height);
-        if (wall.Colision(mask) && goTop || wall.Colision(mask) && goDown)
-            return true;
-        return false;
-    }
+    // public bool CollideWallY(Wall wall)
+    // {
+    //     mask = new Rectangle(zombie.X, zombie.Y, zombie.Width, zombie.Height);
+    //     if (wall.Colision(mask) && goTop || wall.Colision(mask) && goDown)
+    //         return true;
+    //     return false;
+    // }
 
 
     public void TakeDamage(bool damage, int attack)

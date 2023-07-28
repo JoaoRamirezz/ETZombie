@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class Police : IBody
 {
+    Image gunImg;
     Image policesImg;
     int distanceImg = 3;
 
@@ -14,8 +15,8 @@ public class Police : IBody
     Rectangle backbar;
     public int x;
     public int y;
-    public int width = 20;
-    public int height = 20;
+    public int width = 35;
+    public int height = 30;
     double d;
     double range;
     int pointOfView = 500;
@@ -43,7 +44,6 @@ public class Police : IBody
         pistol = new Pistol(form, this);
         pistols.Add(pistol);
         maxlife = life;
-
     }
 
     public void TakeDamage(bool damage, int attack)
@@ -52,16 +52,19 @@ public class Police : IBody
             Damage(attack);
     }
 
-    public void putImage(Image img)
-        => policesImg = img;
+    public void putImage(Image img,  Image gun)
+    {
+        gunImg = gun;
+        policesImg = img;
+    }
 
-    public void draw(Graphics g)
+    public void Draw(Graphics g)
     {
         GraphicsUnit units = GraphicsUnit.Pixel;
-        g.DrawImage(policesImg, police, distanceImg, 0, 35, 40,units);
-        pistol.Draw(g, new SolidBrush(Color.Orange), new SolidBrush(Color.Gray));
+        g.DrawImage(policesImg, police, distanceImg, 0, 35, 40, units);
+        pistol.Draw(g, gunImg, new SolidBrush(Color.Gray));
         g.FillRectangle(new SolidBrush(Color.Black), backbar);
-        g.FillRectangle(new SolidBrush(Color.Red), bar);
+        g.FillRectangle(new SolidBrush(Color.Blue), bar);
     }
 
     public void Damage(int attack)
@@ -78,20 +81,16 @@ public class Police : IBody
         catch (System.Exception) { }
     }
 
-    public void Draw(Graphics g, SolidBrush color)
-    {
-        g.FillRectangle(color, this.police);
-        pistol.Draw(g, new SolidBrush(Color.Orange), new SolidBrush(Color.Gray));
-        g.FillRectangle(new SolidBrush(Color.Black), backbar);
-        g.FillRectangle(new SolidBrush(Color.Red), bar);
-    }
-
     public void Update()
     {
         police.Location = new Point(x, y);
 
         backbar.Location = new Point(x, y - 10);
         bar.Location = new Point(x, y - 10);
+        
+        distanceImg += 40;
+        if (distanceImg >= 140)
+            distanceImg = 2;
     }
 
     public void ToSearchFor(ZombieMain Joe, Form form, List<Zombie> zombies)

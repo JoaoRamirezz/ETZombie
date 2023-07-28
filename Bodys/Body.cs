@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 public interface IBody
 {
-    void Draw(Graphics g, SolidBrush color);
+    void Draw(Graphics g);
     void Update(); 
 }
 

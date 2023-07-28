@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 public interface IGun
 {
-    void Draw(Graphics g, SolidBrush color, SolidBrush colorBullet);
+    void Draw(Graphics g, Image gunImg, SolidBrush colorBullet);
     void Shot(Point joeLocation, Form form);
     void Reload(Form form);
     void Update(int x, int y); 
