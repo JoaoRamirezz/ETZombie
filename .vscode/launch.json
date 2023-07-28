@@ -10,7 +10,15 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
+<<<<<<< HEAD
+<<<<<<< HEAD
             "program": "${workspaceFolder}/bin/Debug/net6.0-windows/ETZombie.dll",
+=======
+            "program": "${workspaceFolder}/bin/Debug/net7.0-windows/ETZombie.dll",
+>>>>>>> BranchRamirez
+=======
+            "program": "${workspaceFolder}/bin/Debug/net7.0-windows/ETZombie.dll",
+>>>>>>> f56ec12ea8da442050d05c4fd28837a8981a8948
             "args": [],
             "cwd": "${workspaceFolder}",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console

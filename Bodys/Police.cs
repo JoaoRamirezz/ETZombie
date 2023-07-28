@@ -1,12 +1,12 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 public class Police : IBody
 {
     public Rectangle police;
     Random numberRandom = Random.Shared;
-    private DateTime lastFrame = DateTime.Now;
     Rectangle bar;
     Rectangle backbar;
     public int x;
@@ -15,14 +15,18 @@ public class Police : IBody
     public int height = 20;
     double d;
     double range;
-    int pointOfView = 200;
+    int pointOfView = 500;
     double direcaoX;
     double direcaoY;
     int MovieSpeed = 1;
     Pistol pistol;
-    // Bullet bullet;
+    bool flag = false;
+    int firerate = 100;
+    public int life = 200;
+    int maxlife = 0;
 
-    public Police(Form form)
+
+    public Police(Form form, List<Pistol> pistols)
     {
         police = new Rectangle(
             numberRandom.Next(0, 1200),
@@ -34,44 +38,77 @@ public class Police : IBody
         backbar = new Rectangle(police.Location.X, police.Location.Y - 10, width, 5);
         bar = new Rectangle(police.Location.X, police.Location.Y - 10, width, 5);
         pistol = new Pistol(form, this);
+        pistols.Add(pistol);
+        maxlife = life;
+
     }
 
+    public void TakeDamage(bool damage, int attack)
+    {
+        if (damage)
+            Damage(attack);
+    }
+
+    public void Damage(int attack)
+    {
+        life -= attack;
+        try
+        {
+            int d = life * width / maxlife;
+            if (d < 0)
+                d = 0;
+            bar.Size = new Size(d, 5);
+        }
+
+        catch (System.Exception) { }
+    }
 
     public void Draw(Graphics g, SolidBrush color)
     {
         g.FillRectangle(color, this.police);
-        pistol.Draw(g, new SolidBrush(Color.Orange));
-        // g.FillRectangle(new SolidBrush(Color.Black), backbar);
-        // g.FillRectangle(new SolidBrush(Color.Red), bar);
+        pistol.Draw(g, new SolidBrush(Color.Orange), new SolidBrush(Color.Gray));
+        g.FillRectangle(new SolidBrush(Color.Black), backbar);
+        g.FillRectangle(new SolidBrush(Color.Red), bar);
     }
 
     public void Update()
     {
-        // police.Location = new Point(x, y);
-        
+        police.Location = new Point(x, y);
 
-        // backbar.Location = new Point(x, y - 10);
-        // bar.Location = new Point(x, y - 10);
-
+        backbar.Location = new Point(x, y - 10);
+        bar.Location = new Point(x, y - 10);
     }
 
-    public void ToSearchFor(int zombieX, int zombieY)
+    public void ToSearchFor(ZombieMain Joe, Form form, List<Zombie> zombies)
     {
+        var JoeInitialX = Joe.x;
+        var JoeInitialY = Joe.y;
+
         x = police.Location.X;
         y = police.Location.Y;
 
-        d = Math.Pow((x - zombieX), 2) + Math.Pow((y - zombieY), 2);
+        d = Math.Pow((x - Joe.x), 2) + Math.Pow((y - Joe.y), 2);
 
         range = Math.Sqrt(d);
 
-        // pistol.Inactive();
+        var joeLoc = new Point(JoeInitialX, JoeInitialY);
+
+        if (flag)
+            pistol.Shot(joeLoc, form);
 
         if (range <= pointOfView)
         {
-            pistol.Shot(zombieX, zombieY);
+            flag = true;
 
-            direcaoX = -(x - zombieX);
-            direcaoY = -(y - zombieY);
+            pistol.Shot(joeLoc, form);
+            if (numberRandom.Next(0, firerate) == 2)
+            {
+                pistol.Reload(form);
+            }
+
+
+            direcaoX = -(x - Joe.x);
+            direcaoY = -(y - Joe.y);
 
             double pita = Math.Sqrt(direcaoX * direcaoX + direcaoY * direcaoY);
 

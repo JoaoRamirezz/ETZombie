@@ -5,25 +5,34 @@ using System.Collections.Generic;
 
 public class Zombie : IBody
 {
+
+    Rectangle bar;
+    Rectangle backbar;
     Rectangle zombie;
-    Random numberRandom = Random.Shared;
-    Random randomFX = new Random();
-    Random randomFY = new Random();
     public int attackdamage = 1;
     public int x;
     public int y;
+    public int Width = 20;
+    public int Height = 20;
     double velX = 0;
     double velY = 0;
     double FiX;
     double FiY;
-    double dj;
-    double dL;
-    double range;
-    bool humandamage = true;
+    public int life = 50;
+    public int maxlife = 0;
+    int speed = 10000;
 
     public Zombie(int x, int y)
     {
-        zombie = new Rectangle(x, y, 20, 20);
+        zombie = new Rectangle(x, y, Width, Height);
+
+
+        backbar = new Rectangle(zombie.Location.X, zombie.Location.Y - 10, Width, 5);
+        bar = new Rectangle(zombie.Location.X, zombie.Location.Y - 10, Height, 5);
+
+        maxlife = life;
+
+
         this.x = x;
         this.y = y;
     }
@@ -31,12 +40,40 @@ public class Zombie : IBody
     public void Draw(Graphics g, SolidBrush color)
     {
         g.FillRectangle(color, this.zombie);
+        g.FillRectangle(new SolidBrush(Color.Black), backbar);
+        g.FillRectangle(new SolidBrush(Color.Red), bar);
     }
 
+    public void Spaw(int x, int y)
+    {
+        zombie.Location = new Point(x, y);
+    }
+
+    public void TakeDamage(bool damage, int attack){
+        if(damage)
+            Damage(attack);
+    }
+
+    public void Damage(int attack)
+    {
+        life -= attack;
+        try
+        {
+            int d = life * Width / maxlife;
+            if (d < 0)
+                d = 0;
+            bar.Size = new Size(d, 5);
+        }
+
+        catch (System.Exception) { }
+    }
+
+
     private DateTime lastFrame = DateTime.Now;
+
     public void DrunkZombie(List<Zombie> zombieList, int zombieLiderX, int zombieLiderY)
     {
-        float A = 100_000_000f;
+        float A = 300_000_000f;
         float B = 0.05f;
 
         var FrameCurrent = DateTime.Now - lastFrame;
@@ -87,22 +124,34 @@ public class Zombie : IBody
 
             zombieList[i].velX += FiX * time;
             zombieList[i].velY += FiY * time;
+
+            if (zombieList[i].velX > speed)
+                zombieList[i].velX = speed;
+            else if (zombieList[i].velX < -speed)
+                zombieList[i].velX = -speed;
+
+            if (zombieList[i].velY > speed)
+                zombieList[i].velY = speed;
+            else if (zombieList[i].velY < -speed)
+                zombieList[i].velY = -speed;
         }
 
         for (int i = 0; i < zombieList.Count; i++)
         {
             var zombie = zombieList[i];
-            zombie.zombie.Location = new Point(
-                (int)(zombie.zombie.Location.X + zombie.velX * time),
-                (int)(zombie.zombie.Location.Y + zombie.velY * time)
-            );
+
+            x = (int)(zombie.zombie.Location.X + zombie.velX * time);
+            y = (int)(zombie.zombie.Location.Y + zombie.velY * time);
+
+            zombie.zombie.Location = new Point(x, y);
+            zombie.backbar.Location = new Point(x, y - 10);
+            zombie.bar.Location = new Point(x, y - 10);
         }
     }
 
-
     public void Update()
     {
-        throw new NotImplementedException();
+
     }
 
     public bool intersect(Human human)
@@ -112,4 +161,14 @@ public class Zombie : IBody
             return true;
         return false;
     }
+    public bool intersectPolice(Police police)
+    {
+        Rectangle Rect = new Rectangle(police.x, police.y, police.width, police.height);
+        if (this.zombie.IntersectsWith(Rect))
+            return true;
+        return false;
+    }
+    
+    public bool intersectShot(Rectangle bullet)
+    => this.zombie.IntersectsWith(bullet);
 }
