@@ -52,7 +52,7 @@ public class Game
         policesImg = new List<Image>();
         brainsImg = new List<Image>();
 
-        mapImg = Image.FromFile("imagens/map.png");
+        mapImg = Image.FromFile("imagens/mapCity.png");
 
         zombiesImg.Add(Image.FromFile("imagens/zombines1.png"));
         zombiesImg.Add(Image.FromFile("imagens/zombines2.png"));
