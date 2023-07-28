@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 public class Police : IBody
 {
+    Image policesImg;
+    int distanceImg = 3;
+
     public Rectangle police;
     Random numberRandom = Random.Shared;
     Rectangle bar;
@@ -47,6 +50,18 @@ public class Police : IBody
     {
         if (damage)
             Damage(attack);
+    }
+
+    public void putImage(Image img)
+        => policesImg = img;
+
+    public void draw(Graphics g)
+    {
+        GraphicsUnit units = GraphicsUnit.Pixel;
+        g.DrawImage(policesImg, police, distanceImg, 0, 35, 40,units);
+        pistol.Draw(g, new SolidBrush(Color.Orange), new SolidBrush(Color.Gray));
+        g.FillRectangle(new SolidBrush(Color.Black), backbar);
+        g.FillRectangle(new SolidBrush(Color.Red), bar);
     }
 
     public void Damage(int attack)

@@ -7,11 +7,20 @@ using System.Media;
 
 public class Game
 {
+    Image imagePolice;
+    Image imageZombie;
+    Image imageHuman;
+    Image imageBrain;
 
     Upgrade upgrade = new Upgrade();
 
     private Random number = new Random();
     private int brain = 0;
+
+    private List<Image> zombiesImg;
+    private List<Image> policesImg;
+    private List<Image> humansImg;
+    private List<Image> brainsImg;
 
 
     private List<IBody> bodys;
@@ -19,7 +28,9 @@ public class Game
     private List<Human> humans;
     private List<Police> polices;
     private List<Pistol> pistols;
+    private List<BrainPoison> brainsPoison;
 
+    private BrainPoison brainpoison;
     private Human human;
     private Police police;
     private Zombie zombie;
@@ -27,17 +38,38 @@ public class Game
     int pct;
     bool dead = false;
     bool flag = true;
+    int spawmPolices = 3;
+    int spawnHumans = 80;
+    int spawmPoison = 5;
 
     public void go(Image JoeImg, ZombieMain zombieMain, SoundPlayer music)
     {
         music.PlayLooping();
-        pct = number.Next(zombieMain.chance, 20);
+        zombiesImg = new List<Image>();
+        humansImg = new List<Image>();
+        policesImg = new List<Image>();
+        brainsImg = new List<Image>();
+
+        zombiesImg.Add(Image.FromFile("imagens/zombines1.png"));
+        zombiesImg.Add(Image.FromFile("imagens/zombines2.png"));
+        zombiesImg.Add(Image.FromFile("imagens/zombines3.png"));
+
+        policesImg.Add(Image.FromFile("imagens/politia1.png"));
+        policesImg.Add(Image.FromFile("imagens/politia2.png"));
+
+        humansImg.Add(Image.FromFile("imagens/npc1.png"));
+        humansImg.Add(Image.FromFile("imagens/npc2.png"));
+        humansImg.Add(Image.FromFile("imagens/npc3.png"));
+        humansImg.Add(Image.FromFile("imagens/npc4.png"));
+
+        brainsImg.Add(Image.FromFile("imagens/pocao.png"));
 
         bodys = new List<IBody>();
         zombies = new List<Zombie>();
         humans = new List<Human>();
         polices = new List<Police>();
         pistols = new List<Pistol>();
+        brainsPoison = new List<BrainPoison>();
 
         bool running = true;
 
@@ -50,6 +82,7 @@ public class Game
         form.FormBorderStyle = FormBorderStyle.None;
         form.BackgroundImage = Image.FromFile("Screens/images/map.png");
 
+
         PictureBox pb = new PictureBox();
         pb.Dock = DockStyle.Fill;
         form.Controls.Add(pb);
@@ -57,14 +90,14 @@ public class Game
 
         var zombieFlag = zombieMain;
 
+        brainpoison = new BrainPoison(form);
         human = new Human(form);
         police = new Police(form, pistols);
         zombie = new Zombie(human.x, human.y);
-        // wall = new Wall(50,50,30,100);
 
         var killed = false;
 
-        generateBots(100, 10, form);
+        generateBots(spawnHumans, spawmPolices, spawmPoison, form);
 
         var timer = new Timer();
         timer.Interval = 30;
@@ -76,45 +109,44 @@ public class Game
             while (running)
             {
                 if (zombieMain.life <= 0)
-                    break; 
+                    break;
 
-                
                 GraphicsUnit units = GraphicsUnit.Pixel;
-                g.DrawString("Brains: " + brain.ToString(), new Font("arial", 15), Brushes.Black, 0, 40);
-                g.DrawString("Horde: " + zombies.Count.ToString(), new Font("arial", 15), Brushes.Black, 0, 70);
+                g.DrawString("Brains:" + brain.ToString(), new Font("arial", 15), Brushes.Black, 0, 40);
+                g.DrawString("Horde:" + zombies.Count.ToString(), new Font("arial", 15), Brushes.Black, 0, 65);
+
+                g.DrawString("Damage: " + zombieMain.attackDamage.ToString(), new Font("arial", 13), Brushes.Black, 0, 112);
+                g.DrawString("Speed: " + zombieMain.movespeed.ToString(), new Font("arial", 13), Brushes.Black, 0, 132);
+                g.DrawString("Chance: " + zombieMain.chance.ToString(), new Font("arial", 13), Brushes.Black, 0, 152);
+                g.DrawString("Cure: " + zombieMain.cure.ToString(), new Font("arial", 13), Brushes.Black, 0, 172);
+
                 g.DrawString(zombieMain.life.ToString(), new Font("arial", 10), Brushes.Black, 210, 0);
                 zombieMain.draw(g);
                 zombieMain.Update();
 
-                // if(zombieMain.CollideWallX(wall))
-                // {
-                //     if(zombieMain.x > wall.X)
-                //         zombieMain.x = wall.X + wall.Width;
-                //     else
-                //         zombieMain.x = wall.X - zombieMain.Height;
-                // }
-
-                // if(zombieMain.CollideWallY(wall))
-                // {
-                //     if(zombieMain.y < wall.Y)
-                //         zombieMain.y = wall.Y - zombieMain.Height;
-                //     else
-                //         zombieMain.y = wall.Y + wall.Height;
-                // }
-
-
-                // wall.Draw(g, new SolidBrush(Color.Orange));
+                for (int b = 0; b < brainsPoison.Count; b++)
+                {
+                    // brainsPoison[b].Draw(g, new SolidBrush(Color.Purple));
+                    brainsPoison[b].draw(g);
+                    if (zombieMain.takePoison(brainsPoison[b]))
+                    {
+                        zombieMain.life += zombieMain.cure;
+                        brainsPoison.Remove(brainsPoison[b]);
+                        b -= 1;
+                        zombieMain.Update();
+                    }
+                }
 
                 for (int i = 0; i < humans.Count; i++)
                 {
-                    humans[i].Draw(g, new SolidBrush(Color.Black));
+                    humans[i].draw(g);
                     humans[i].escape(zombieMain.x, zombieMain.y);
                     humans[i].Update();
                     humans[i].TakeDamage(zombieMain.intersect(humans[i]), zombieMain.attackDamage);
 
                     if (humans[i].life <= 0)
                     {
-                        newZombie(humans[i]);
+                        newZombie(humans[i], zombieMain);
                         i -= 1;
                     }
                 }
@@ -122,20 +154,16 @@ public class Game
                 for (int p = 0; p < polices.Count; p++)
                 {
 
-                    polices[p].Draw(g, new SolidBrush(Color.Blue));
+                    // polices[p].Draw(g, new SolidBrush(Color.Blue));
+                    polices[p].draw(g);
                     polices[p].ToSearchFor(zombieMain, form, zombies);
                     polices[p].Update();
                     polices[p].TakeDamage(zombieMain.intersectPolice(polices[p]), zombieMain.attackDamage);
-
-                    if (polices[p].life <= 0)
-                    {
-                        polices.Remove(polices[p]);
-                        p -= 1;
-                    }
                 }
 
-                for (int j = 0; j < zombies.Count; j++){
-                    zombies[j].Draw(g, new SolidBrush(Color.Green));
+                for (int j = 0; j < zombies.Count; j++)
+                {
+                    zombies[j].draw(g);
 
                     for (int i = 0; i < humans.Count; i++)
                     {
@@ -143,7 +171,7 @@ public class Game
 
                         if (humans[i].life <= 0)
                         {
-                            newZombie(humans[i]);
+                            newZombie(humans[i], zombieMain);
                             i -= 1;
                             killed = true;
                             break;
@@ -173,8 +201,8 @@ public class Game
                         zombies[d].TakeDamage(zombies[d].intersectShot(p.bullet), p.damage);
                         if (zombies[d].intersectShot(p.bullet))
                         {
-                            p.bullet.Location = new Point(0,0);
-                        }   
+                            p.bullet.Location = new Point(0, 0);
+                        }
 
                         if (zombies[d].life <= 0)
                         {
@@ -188,16 +216,25 @@ public class Game
                     if (zombieMain.life <= 0)
                     {
                         dead = true;
-                        break; 
+                        break;
                     }
                 }
-                if(dead)
+                if (dead)
                     break;
 
 
                 killed = false;
 
+                if (polices.Count <= 0 || humans.Count <= 0)
+                {
+                    generateBots(spawnHumans, spawmPolices, spawmPoison, form);
+                    spawnHumans += 20;
+                    spawmPolices += 3;
+                    spawmPoison += 1;
+                }
+
                 zombie.DrunkZombie(zombies, zombieMain.x, zombieMain.y);
+
 
                 pb.Refresh();
                 g.Clear(Color.Transparent);
@@ -210,7 +247,7 @@ public class Game
                 zombieFlag.maxbrains += brain;
                 form.Hide();
                 flag = false;
-                upgrade.go(zombieFlag,music);
+                upgrade.go(zombieFlag, music);
             }
         };
 
@@ -241,11 +278,16 @@ public class Game
         form.Show();
     }
 
-    public void newZombie(Human human)
+    public void newZombie(Human human, ZombieMain zombieMain)
     {
-        if (pct == pct)
+        pct = number.Next(zombieMain.chance, 21);
+        var index = number.Next(0, zombiesImg.Count);
+        if (pct == 20)
         {
             var zombie = new Zombie(human.x, human.y);
+            zombie.life = zombieMain.zombiesLife;
+            imageZombie = zombiesImg[index];
+            zombie.putImage(imageZombie);
             humans.Remove(human);
             zombies.Add(zombie);
             bodys.Add(zombie);
@@ -258,11 +300,13 @@ public class Game
         }
     }
 
-    public void generateBots(int qttHumans, int qttPolices, Form form)
+    public void generateBots(int qttHumans, int qttPolices, int qttBrains, Form form)
     {
         for (int i = 0; i < qttHumans; i++)
         {
             human = new Human(form);
+            imageHuman = humansImg[number.Next(0, humansImg.Count)];
+            human.putImage(imageHuman);
             humans.Add(human);
             bodys.Add(human);
         }
@@ -271,8 +315,17 @@ public class Game
         {
             police = new Police(form, pistols);
             polices.Add(police);
+            imagePolice = policesImg[number.Next(0, policesImg.Count)];
+            polices[p].putImage(imagePolice);
         }
 
+        for (int p = 0; p < qttBrains; p++)
+        {
+            brainpoison = new BrainPoison(form);
+            brainsPoison.Add(brainpoison);
+            imageBrain = brainsImg[0];
+            brainsPoison[p].putImage(imageBrain);
+        }
     }
 
 }
