@@ -11,7 +11,7 @@ public class ZombieMain : IBody
     Image zombieImg;
 
     public int cure = 20;
-    public int zombiesLife = 10;
+    public int zombiesLife = 50;
 
     public int LifePrice = 10;
     public int DamagePrice = 10;
@@ -20,6 +20,9 @@ public class ZombieMain : IBody
     public int CurePrice = 10;
     public int ZombiesLifePrice = 10;
     
+
+
+    public int PoliceDamage = 20;
     public int maxbrains = 0;
     int distanceImg = 3;
     public int life = 200;

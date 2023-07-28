@@ -49,7 +49,7 @@ public class Upgrades
 
 
     public void MoreZombiesLife(ZombieMain zombie)
-        => zombie.zombiesLife += 10;
+        => zombie.zombiesLife += 20;
     public string MoreZombiesLifeName()
         => "Zombies Life 💚";
 

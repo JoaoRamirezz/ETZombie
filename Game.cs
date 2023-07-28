@@ -245,7 +245,7 @@ public class Game
                 g.DrawString(zombieMain.life.ToString(), new Font("arial", 12), Brushes.White, 11, 10);
                 zombieMain.Update();
 
-                var stats = new Rectangle(0, 35, 120, 180);
+                var stats = new Rectangle(0, 35, 120, 165);
                 g.FillRectangle(Brushes.Black, stats);
                 // form.Controls.Add(stats);
 
@@ -254,7 +254,7 @@ public class Game
 
                 g.DrawString("Damage: " + zombieMain.attackDamage.ToString(), new Font("arial", 13), Brushes.White, 0, 112);
                 g.DrawString("Speed: " + zombieMain.movespeed.ToString(), new Font("arial", 13), Brushes.White, 0, 132);
-                g.DrawString("Chance: " + zombieMain.chance.ToString(), new Font("arial", 13), Brushes.White, 0, 152);
+                g.DrawString("Chance: " + zombieMain.chance.ToString()+"0 %", new Font("arial", 13), Brushes.White, 0, 152);
                 g.DrawString("Cure: " + zombieMain.cure.ToString(), new Font("arial", 13), Brushes.White, 0, 172);
 
 
@@ -310,9 +310,9 @@ public class Game
 
     public void newZombie(Human human, ZombieMain zombieMain)
     {
-        pct = number.Next(zombieMain.chance, 21);
+        pct = number.Next(zombieMain.chance, 11);
         var index = number.Next(0, zombiesImg.Count);
-        if (pct == 20)
+        if (pct == 10)
         {
             var zombie = new Zombie(human.x, human.y);
             zombie.life = zombieMain.zombiesLife;
@@ -344,18 +344,18 @@ public class Game
         for (int p = 0; p < qttPolices; p++)
         {
             police = new Police(form, pistols);
-            polices.Add(police);
-            imagePolice = policesImg[number.Next(0, policesImg.Count)];
             imageGun = gunsImg[number.Next(0, gunsImg.Count)];
-            polices[p].putImage(imagePolice, imageGun);
+            imagePolice = policesImg[number.Next(0, policesImg.Count)];
+            police.putImage(imagePolice, imageGun);
+            polices.Add(police);
         }
 
         for (int p = 0; p < qttBrains; p++)
         {
             brainpoison = new BrainPoison(form);
-            brainsPoison.Add(brainpoison);
             imageBrain = brainsImg[0];
-            brainsPoison[p].putImage(imageBrain);
+            brainpoison.putImage(imageBrain);
+            brainsPoison.Add(brainpoison);
         }
     }
 
