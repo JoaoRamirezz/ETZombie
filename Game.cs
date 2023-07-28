@@ -218,6 +218,10 @@ public class Game
                     }
 
                     zombieMain.TakeDamage(zombieMain.intersectShot(p.bullet), p.damage);
+                    if (zombieMain.intersectShot(p.bullet))
+                        {
+                            p.bullet.Location = new Point(0, 0);
+                        }
                     if (zombieMain.life <= 0)
                     {
                         dead = true;
